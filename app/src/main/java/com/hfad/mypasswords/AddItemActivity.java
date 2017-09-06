@@ -16,6 +16,9 @@ import java.sql.SQLException;
 
 public class AddItemActivity extends BaseActivity {
 
+
+
+
     private String mode;
     private Integer groupId;
 

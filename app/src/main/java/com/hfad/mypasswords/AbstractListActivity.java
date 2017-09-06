@@ -25,6 +25,8 @@ import com.hfad.mypasswords.data.Item;;
 
 public abstract class AbstractListActivity extends BaseActivity {
 
+
+
     private ArrayAdapter<Item> arrayAdapter;
     private Integer groupId;
     private List<Item> items = new ArrayList<Item>();

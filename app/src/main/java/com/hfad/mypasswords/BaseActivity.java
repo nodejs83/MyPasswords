@@ -18,6 +18,9 @@ import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 
+
+
+    
     // Reference of DatabaseHelper class to access its DAOs and other components
     private DatabaseHelper databaseHelper = null;
 
