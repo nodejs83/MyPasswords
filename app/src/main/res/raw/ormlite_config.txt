@@ -1,0 +1,37 @@
+#################################
+# --table-start--
+dataClass=com.hfad.mypasswords.data.Item
+tableName=item
+# --table-fields-start--
+
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+
+
+# --field-start--
+fieldName=name
+# --field-end--
+
+# --field-start--
+fieldName=login
+# --field-end--
+
+# --field-start--
+fieldName=password
+# --field-end--
+
+# --field-start--
+fieldName=isGroup
+# --field-end--
+
+# --field-start--
+fieldName=groupItem
+columnName=group_item
+foreign=true
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################
