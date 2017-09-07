@@ -7,7 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.hfad.mypasswords.data.Item;;
+import com.hfad.mypasswords.data.Item;
+import com.j256.ormlite.stmt.DeleteBuilder;;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -34,7 +35,9 @@ public class MainActivity extends AbstractListActivity {
                 @Override
                 public Void call() throws Exception {
                     if(item.isGroup()){
-                        query(getDeleteBuilder().where().eq(Utils.GROUPITEM_COLUMN, item.getId()).prepare());
+                        DeleteBuilder deleteBuilder = getDeleteBuilder();
+                        deleteBuilder.where().eq(Utils.GROUPITEM_COLUMN, item.getId());
+                        delete(deleteBuilder.prepare());
                     }
                     getHelper().getItemDao().deleteById(item.getId());
                     return null;

@@ -41,7 +41,7 @@ public class AddItemActivity extends BaseActivity {
     private void handleSpinnerVisibility(){
         Spinner spinner = (Spinner) findViewById(R.id.entry_types);
         if(Utils.CREDENTIAL.equals(mode)){
-            spinner.setVisibility(View.INVISIBLE);
+            spinner.setVisibility(View.GONE);
         }else{
             spinner.setVisibility(View.VISIBLE);
             spinner.setOnItemSelectedListener(getOnItemSelectedListener());

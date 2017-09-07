@@ -6,6 +6,7 @@ import com.hfad.mypasswords.data.*;
 import com.hfad.mypasswords.data.Item;;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 
@@ -55,6 +56,11 @@ public class BaseActivity extends AppCompatActivity {
 
     protected  List<Item> query(PreparedQuery<Item> query) throws SQLException{
         return getHelper().getItemDao().query(query);
+    }
+
+
+    protected  void delete(PreparedDelete<Item> query) throws SQLException{
+         getHelper().getItemDao().delete(query);
     }
 
 }

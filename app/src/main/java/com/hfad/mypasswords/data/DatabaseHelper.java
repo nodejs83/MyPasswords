@@ -32,7 +32,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
             TableUtils.createTable(connectionSource, Item.class);
-//            getItemDao().create(DataBaseUtils.getItems());
+            getItemDao().create(DataBaseUtils.getItems());
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
         }
