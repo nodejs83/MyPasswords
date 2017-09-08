@@ -1,8 +1,10 @@
 package com.hfad.mypasswords;
 
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,6 +95,9 @@ public class AddItemActivity extends BaseActivity {
 
     private void addGroupItem(){
         String name = ((EditText)findViewById(R.id.add_group_name)).getText().toString();
+        if(!Utils.hasText(name)){
+            return;
+        }
         try {
             Item groupItem = new Item();
             groupItem.setName(name);
@@ -107,23 +112,57 @@ public class AddItemActivity extends BaseActivity {
         String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         String login = ((EditText)findViewById(R.id.add_login)).getText().toString();
         String password = ((EditText)findViewById(R.id.add_password)).getText().toString();
+        String confirm = ((EditText)findViewById(R.id.add_password_confirm)).getText().toString();
+        String error = validateInputs(name,login, password, confirm);
 
-        if(Utils.hasText(name) && (Utils.hasText(login) || Utils.hasText(password))){
+        if(Utils.NOINPUT.equals(error)){
+            return;
+        }else if (Utils.hasText(error)){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setTitle("Errors");
+            dialog.setMessage(error);
+            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }else {
             Item credentialItem = new Item();
             credentialItem.setLogin(login);
             credentialItem.setName(name);
             credentialItem.setPassword(password);
             try {
-                if(groupId == null){
+                if (groupId == null) {
                     getHelper().getItemDao().create(credentialItem);
-                }else{
+                } else {
                     credentialItem.setGroupItem(getHelper().getItemDao().queryForId(groupId));
                     getHelper().getItemDao().create(credentialItem);
                 }
-            }catch(SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private String validateInputs(String name, String login, String password, String confirm){
+        if(!Utils.hasText(name) && !Utils.hasText(login)
+                &&  !Utils.hasText(password) &&  !Utils.hasText(confirm)){
+            return Utils.NOINPUT;
+        }else if (!Utils.hasText(name)){
+            return "Enter a name";
+        }else if (!Utils.hasText(login) &&  !Utils.hasText(password)
+                &&  !Utils.hasText(confirm)){
+            return "Enter a login or a password";
+        }
+
+        if(Utils.hasText(password) || Utils.hasText(confirm)){
+            if(!password.equals(confirm)){
+                return "The passwords do not match";
+            }
+        }
+        return null;
     }
 
 
