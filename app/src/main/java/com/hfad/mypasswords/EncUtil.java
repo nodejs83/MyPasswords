@@ -20,7 +20,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EncUtil {
 
-    private final static String password = "123";
+    private final static String password = "123kljlkjmlj";
 
     public static SecretKey generateKey()
             throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -48,5 +48,14 @@ public class EncUtil {
         cipher.init(Cipher.DECRYPT_MODE, secret);
         String decryptString = new String(cipher.doFinal(cipherText), "UTF-8");
         return decryptString;
+    }
+
+    public static void main(String[] args)  throws NoSuchAlgorithmException, InvalidKeySpecException,
+          NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
+        ,InvalidAlgorithmParameterException{
+        String password = "711983sec";
+        byte[] bytes = encryptMsg(password, generateKey());
+        decryptMsg(bytes, generateKey());
+
     }
 }

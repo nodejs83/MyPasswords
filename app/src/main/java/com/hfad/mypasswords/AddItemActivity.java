@@ -1,15 +1,19 @@
 package com.hfad.mypasswords;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.hfad.mypasswords.data.Item;;
@@ -30,7 +34,7 @@ public class AddItemActivity extends BaseActivity {
         setContentView(R.layout.activity_add_item);
 
         getExtras();
-        handleSpinnerVisibility();
+        configView();
 
         if (findViewById(R.id.fragment_container) != null) {
             if (savedInstanceState != null) {
@@ -40,10 +44,12 @@ public class AddItemActivity extends BaseActivity {
         }
     }
 
-    private void handleSpinnerVisibility(){
+    private void configView(){
         Spinner spinner = (Spinner) findViewById(R.id.entry_types);
         if(Utils.CREDENTIAL.equals(mode)){
             spinner.setVisibility(View.GONE);
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.add_item_layout);
+            linearLayout.setPadding(0,50,0,0);
         }else{
             spinner.setVisibility(View.VISIBLE);
             spinner.setOnItemSelectedListener(getOnItemSelectedListener());
@@ -78,37 +84,41 @@ public class AddItemActivity extends BaseActivity {
                 boolean isGroup = false;
 
                 if(groupId == null){
-                    isGroup = ((Spinner) findViewById(R.id.entry_types)).getSelectedItemPosition() == 1 ? true : false;
+                    isGroup = ((Spinner) findViewById(R.id.entry_types)).getSelectedItemPosition() == 1;
                 }
 
+                boolean quit = false;
                 if(isGroup){
-                    addGroupItem();
+                    quit = addGroupItem();
                 }else{
-                    addCredentialItem();
+                    quit = addCredentialItem();
                 }
-                this.finish();
+                if(quit){
+                    this.finish();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
     }
 
-    private void addGroupItem(){
+    private boolean addGroupItem(){
         String name = ((EditText)findViewById(R.id.add_group_name)).getText().toString();
         if(!Utils.hasText(name)){
-            return;
+            return true;
         }
         try {
             Item groupItem = new Item();
-            groupItem.setName(name);
+            groupItem.setName(Utils.capitalize(name));
             groupItem.setGroup(true);
             getHelper().getItemDao().create(groupItem);
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return true;
     }
 
-    private void addCredentialItem(){
+    private boolean addCredentialItem(){
         String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         String login = ((EditText)findViewById(R.id.add_login)).getText().toString();
         String password = ((EditText)findViewById(R.id.add_password)).getText().toString();
@@ -116,7 +126,7 @@ public class AddItemActivity extends BaseActivity {
         String error = validateInputs(name,login, password, confirm);
 
         if(Utils.NOINPUT.equals(error)){
-            return;
+            return true;
         }else if (Utils.hasText(error)){
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setTitle("Errors");
@@ -128,10 +138,11 @@ public class AddItemActivity extends BaseActivity {
                 }
             });
             dialog.show();
+            return false;
         }else {
             Item credentialItem = new Item();
             credentialItem.setLogin(login);
-            credentialItem.setName(name);
+            credentialItem.setName(Utils.capitalize(name));
             credentialItem.setPassword(password);
             try {
                 if (groupId == null) {
@@ -143,6 +154,7 @@ public class AddItemActivity extends BaseActivity {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            return true;
         }
     }
 
