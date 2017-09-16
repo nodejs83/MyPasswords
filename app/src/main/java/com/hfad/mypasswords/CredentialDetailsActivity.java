@@ -34,7 +34,8 @@ public class CredentialDetailsActivity extends BaseActivity {
         login.setText(item.getLogin());
 
         TextView password = (TextView)findViewById(R.id.password);
-        password.setText(item.getPassword());
+        password.setText(EncUtil.decrypt(item.password, EncUtil.getSecretKeySpec()));
+        //password.setText(item.getPassword());
     }
 
     @Override

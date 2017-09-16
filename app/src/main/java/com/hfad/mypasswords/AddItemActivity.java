@@ -143,7 +143,7 @@ public class AddItemActivity extends BaseActivity {
             Item credentialItem = new Item();
             credentialItem.setLogin(login);
             credentialItem.setName(Utils.capitalize(name));
-            credentialItem.setPassword(password);
+            credentialItem.setPassword(EncUtil.encrypt(password, EncUtil.getSecretKeySpec()));
             try {
                 if (groupId == null) {
                     getHelper().getItemDao().create(credentialItem);
