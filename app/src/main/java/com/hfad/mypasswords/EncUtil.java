@@ -1,40 +1,87 @@
 package com.hfad.mypasswords;
 
-
-
 /**
- * Created by a602256 on 08/09/2017.
+ * Created by Khaled Jamal on 18/09/2017.
  */
+
+import java.security.MessageDigest;
+import java.util.Arrays;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class EncUtil {
 
+    private static final String ALGO = "AES/ECB/PKCS7Padding";
+    private static final String SECRETKEY = "SIDDHARTH";
 
-    public static String encrypt(String strNormalText){
-        String seedValue = "YourSecKey";
-        String normalTextEnc="";
-        try {
-            normalTextEnc = AESHelper.encrypt(seedValue, strNormalText);
-        } catch (Exception e) {
-            e.printStackTrace();
+//    private static final String ALGO = "AES/CBC/PKCS7Padding";
+
+    public static String encryptData(String cleartext)
+            throws Exception {
+        byte[] result = encrypt(cleartext.getBytes());
+        return toHex(result);
+    }
+
+    public static String decryptData(String encrypted)
+            throws Exception {
+        byte[] enc = toByte(encrypted);
+        byte[] result = decrypt(enc);
+        return new String(result);
+    }
+
+    private static byte[] encrypt(byte[] clear) throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGO);
+        cipher.init(Cipher.ENCRYPT_MODE, getSecreteKey(SECRETKEY));
+        byte[] encrypted = cipher.doFinal(clear);
+        return encrypted;
+    }
+
+    private static byte[] decrypt(byte[] encrypted)
+            throws Exception {
+        Cipher cipher = Cipher.getInstance(ALGO);
+        cipher.init(Cipher.DECRYPT_MODE, getSecreteKey(SECRETKEY));
+        byte[] decrypted = cipher.doFinal(encrypted);
+        return decrypted;
+    }
+
+    public static SecretKey getSecreteKey(String secretKey) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] digestOfPassword = md.digest(secretKey.getBytes("UTF-8"));
+        byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
+        SecretKey key = new SecretKeySpec(keyBytes, "AES");
+        return key;
+    }
+
+    public static String toHex(String txt) {
+        return toHex(txt.getBytes());
+    }
+
+    public static String fromHex(String hex) {
+        return new String(toByte(hex));
+    }
+
+    public static byte[] toByte(String hexString) {
+        int len = hexString.length() / 2;
+        byte[] result = new byte[len];
+        for (int i = 0; i < len; i++)
+            result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2),
+                    16).byteValue();
+        return result;
+    }
+
+    public static String toHex(byte[] buf) {
+        if (buf == null)
+            return "";
+        StringBuffer result = new StringBuffer(2*buf.length);
+        for (int i = 0; i < buf.length; i++) {
+            appendHex(result, buf[i]);
         }
-        return normalTextEnc;
+        return result.toString();
     }
-    public static String decrypt(String strEncryptedText){
-        String seedValue = "YourSecKey";
-        String strDecryptedText="";
-        try {
-            strDecryptedText = AESHelper.decrypt(seedValue, strEncryptedText);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return strDecryptedText;
+    private final static String HEX = "0123456789ABCDEF";
+    private static void appendHex(StringBuffer sb, byte b) {
+        sb.append(HEX.charAt((b>>4)&0x0f)).append(HEX.charAt(b&0x0f));
     }
-
-    public static void main(String[] args){
-       String data = "711983sec@@";
-      String encrypted = encrypt(data);
-       System.out.println(encrypted);
-        System.out.println(decrypt(encrypted));
-    }
-
 }

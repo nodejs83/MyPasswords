@@ -1,13 +1,10 @@
 package com.hfad.mypasswords;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -143,7 +140,12 @@ public class AddItemActivity extends BaseActivity {
             Item credentialItem = new Item();
             credentialItem.setLogin(login);
             credentialItem.setName(Utils.capitalize(name));
-            credentialItem.setPassword(EncUtil.encrypt(password));
+            try {
+                credentialItem.setPassword(EncUtil.encryptData(password));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
             try {
                 if (groupId == null) {
                     getHelper().getItemDao().create(credentialItem);
