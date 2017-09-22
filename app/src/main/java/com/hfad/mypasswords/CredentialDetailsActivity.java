@@ -50,7 +50,8 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
                 finish();
                 return true;
             case R.id.action_show_pwd:
-                android.app.DialogFragment dialogFragment = new DialogFragment();
+                DialogFragment dialogFragment = new DialogFragment();
+                dialogFragment.setListener(this);
                 dialogFragment.show(getFragmentManager(), "DialogFragment");
                 return true;
         }

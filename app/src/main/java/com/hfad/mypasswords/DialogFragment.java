@@ -46,9 +46,8 @@ public class DialogFragment  extends android.app.DialogFragment {
         return builder.create();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+
+    public void setListener(Context context) {
         // Verify that the host activity implements the callback interface
         try {
             // Instantiate the NoticeDialogListener so we can send events to the host
