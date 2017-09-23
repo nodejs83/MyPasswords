@@ -14,7 +14,7 @@ public class GroupContentItemsActivity extends AbstractListActivity {
 
     public List<Item> getItems(){
         try {
-            return query(getQueryBuilder().where().eq(Utils.GROUPITEM_COLUMN, getGroupId()).prepare());
+            return queryItems(getItemQueryBuilder().where().eq(Utils.GROUPITEM_COLUMN, getGroupId()).prepare());
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -80,4 +80,6 @@ public class GroupContentItemsActivity extends AbstractListActivity {
     public int getActivityLayoutId(){
         return R.layout.activity_group_list;
     }
+
+    public void checkApplicationPassword(){}
 }

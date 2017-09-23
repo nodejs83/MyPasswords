@@ -35,3 +35,21 @@ foreign=true
 # --table-fields-end--
 # --table-end--
 #################################
+
+
+#################################
+# --table-start--
+dataClass=com.hfad.mypasswords.data.Password
+tableName=password
+# --table-fields-start--
+
+# --field-start--
+fieldName=id
+columnName=id
+generatedId=true
+# --field-end--
+
+
+# --field-start--
+fieldName=password
+# --field-end--

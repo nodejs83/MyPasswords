@@ -14,7 +14,7 @@
         app:hintEnabled="false">
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/dialog_password"
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

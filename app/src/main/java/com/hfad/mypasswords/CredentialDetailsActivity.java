@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -60,12 +61,23 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
 
 
     public void onDialogPositiveClick(DialogFragment dialog){
-        TextView password = (TextView)findViewById(R.id.password);
-        try {
-            password.setText(EncUtil.decryptData(itemObject.getPassword()));
+        String appPass = ((EditText)dialog.getDialog().findViewById(R.id.dialog_password)).getText().toString();
+        try{
+            Password object = (Password) getPasswordQueryBuilder().queryForFirst();
+            if(EncUtil.decryptData(object.getPassword()).equals(appPass)){
+                TextView password = (TextView)findViewById(R.id.password);
+                password.setText(EncUtil.decryptData(itemObject.getPassword()));
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
+
+
+
+    }
+
+    public void onDialogNegativeClick(DialogFragment dialog){
+        dialog.dismiss();
     }
 
 }

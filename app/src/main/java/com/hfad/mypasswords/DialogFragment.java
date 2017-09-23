@@ -17,6 +17,7 @@ public class DialogFragment  extends android.app.DialogFragment {
 
     public interface DialogListener {
         public void onDialogPositiveClick(DialogFragment dialog);
+        public void onDialogNegativeClick(DialogFragment dialog);
     }
 
     DialogListener mListener;
@@ -40,7 +41,7 @@ public class DialogFragment  extends android.app.DialogFragment {
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        DialogFragment.this.getDialog().cancel();
+                        mListener.onDialogNegativeClick(DialogFragment.this);
                     }
                 });
         return builder.create();

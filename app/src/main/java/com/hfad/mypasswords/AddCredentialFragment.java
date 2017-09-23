@@ -14,31 +14,9 @@ import android.widget.EditText;
 
 public class AddCredentialFragment extends Fragment {
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_credential, container, false);
-
         return view;
     }
-
-
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        EditText textInputLayout = (EditText) getView().findViewById(R.id.add_password);
-//        textInputLayout.setOnTouchListener(new View.OnTouchListener() {
-//
-//            public boolean onTouch(View v, MotionEvent event) {
-//                EditText editText = (EditText)v.findViewById(R.id.add_password_confirm);
-//                if(MotionEvent.ACTION_UP == event.getAction()){
-//                    editText.setVisibility(View.INVISIBLE);
-//                }else{
-//                    editText.setVisibility(View.VISIBLE);
-//                }
-//                return false;
-//            }
-//        });
-//    }
 }

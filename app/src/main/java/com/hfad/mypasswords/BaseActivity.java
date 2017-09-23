@@ -46,21 +46,29 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected QueryBuilder getQueryBuilder() throws SQLException{
+    protected QueryBuilder getItemQueryBuilder() throws SQLException{
         return getHelper().getItemDao().queryBuilder();
     }
 
-    protected DeleteBuilder getDeleteBuilder()  throws SQLException{
+    protected DeleteBuilder getItemDeleteBuilder()  throws SQLException{
         return getHelper().getItemDao().deleteBuilder();
     }
 
-    protected  List<Item> query(PreparedQuery<Item> query) throws SQLException{
+    protected  List<Item> queryItems(PreparedQuery<Item> query) throws SQLException{
         return getHelper().getItemDao().query(query);
     }
 
 
-    protected  void delete(PreparedDelete<Item> query) throws SQLException{
+    protected  void deleteItems(PreparedDelete<Item> query) throws SQLException{
          getHelper().getItemDao().delete(query);
+    }
+
+    protected  List<Password> queryPassword(PreparedQuery<Password> query) throws SQLException{
+        return getHelper().getPasswordDao().query(query);
+    }
+
+    protected QueryBuilder getPasswordQueryBuilder() throws SQLException{
+        return getHelper().getPasswordDao().queryBuilder();
     }
 
 }

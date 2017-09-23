@@ -119,8 +119,9 @@ public class AddItemActivity extends BaseActivity {
         String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         String login = ((EditText)findViewById(R.id.add_login)).getText().toString();
         String password = ((EditText)findViewById(R.id.add_password)).getText().toString();
-        String confirm = ((EditText)findViewById(R.id.add_password_confirm)).getText().toString();
-        String error = validateInputs(name,login, password, confirm);
+        //String confirm = ((EditText)findViewById(R.id.add_password_confirm)).getText().toString();
+        String error = validateInputs(name,login, password);
+               // , confirm);
 
         if(Utils.NOINPUT.equals(error)){
             return true;
@@ -138,7 +139,7 @@ public class AddItemActivity extends BaseActivity {
             return false;
         }else {
             Item credentialItem = new Item();
-            credentialItem.setLogin(login);
+            credentialItem.setLogin(Utils.capitalize(login));
             credentialItem.setName(Utils.capitalize(name));
             try {
                 credentialItem.setPassword(EncUtil.encryptData(password));
@@ -160,22 +161,24 @@ public class AddItemActivity extends BaseActivity {
         }
     }
 
-    private String validateInputs(String name, String login, String password, String confirm){
+    private String validateInputs(String name, String login, String password){
+                                  //,String confirm){
         if(!Utils.hasText(name) && !Utils.hasText(login)
-                &&  !Utils.hasText(password) &&  !Utils.hasText(confirm)){
+                &&  !Utils.hasText(password) ){
+                //&&  !Utils.hasText(confirm)){
             return Utils.NOINPUT;
         }else if (!Utils.hasText(name)){
             return "Enter a name";
-        }else if (!Utils.hasText(login) &&  !Utils.hasText(password)
-                &&  !Utils.hasText(confirm)){
+        }else if (!Utils.hasText(login) &&  !Utils.hasText(password)){
+                //&&  !Utils.hasText(confirm)){
             return "Enter a login or a password";
         }
 
-        if(Utils.hasText(password) || Utils.hasText(confirm)){
-            if(!password.equals(confirm)){
-                return "The passwords do not match";
-            }
-        }
+//        if(Utils.hasText(password) || Utils.hasText(confirm)){
+//            if(!password.equals(confirm)){
+//                return "The passwords do not match";
+//            }
+//        }
         return null;
     }
 

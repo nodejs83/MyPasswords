@@ -44,7 +44,10 @@ public abstract class AbstractListActivity extends BaseActivity {
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
+        checkApplicationPassword();
     }
+
+    public abstract void checkApplicationPassword();
 
     public abstract List<Item> getItems();
 

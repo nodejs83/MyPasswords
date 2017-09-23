@@ -23,6 +23,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private Dao<Item, Integer> itemDao;
 
+    private Dao<Password, Integer> passwordDao;
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
     }
@@ -32,6 +34,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
             TableUtils.createTable(connectionSource, Item.class);
+            TableUtils.createTable(connectionSource, Password.class);
             getItemDao().create(DataBaseUtils.getItems());
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
@@ -40,17 +43,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
-        try {
+//        try {
 
             // In case of change in database of next version of application, please increase the value of DATABASE_VERSION variable, then this method will be invoked
             //automatically. Developer needs to handle the upgrade logic here, i.e. create a new table or a new column to an existing table, take the backups of the
             // existing database etc.
-            TableUtils.dropTable(connectionSource, Item.class, true);
-            onCreate(sqLiteDatabase, connectionSource);
-        } catch (SQLException e) {
-            Log.e(DatabaseHelper.class.getName(), "Unable to upgrade database from version " + i + " to new "
-                    + i1, e);
-        }
+//            TableUtils.dropTable(connectionSource, Item.class, true);
+//            TableUtils.dropTable(connectionSource, Password.class, true);
+//            onCreate(sqLiteDatabase, connectionSource);
+//        } catch (SQLException e) {
+//            Log.e(DatabaseHelper.class.getName(), "Unable to upgrade database from version " + i + " to new "
+//                    + i1, e);
+//        }
     }
 
     // Create the getDao methods of all database tables to access those from android code.
@@ -61,5 +65,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             itemDao = getDao(Item.class);
         }
         return itemDao;
+    }
+
+    public Dao<Password, Integer> getPasswordDao() throws SQLException{
+        if(passwordDao == null){
+            passwordDao = getDao(Password.class);
+        }
+        return passwordDao;
     }
 }
