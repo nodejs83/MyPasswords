@@ -4,6 +4,7 @@ import android.app.*;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -19,6 +20,9 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
 
     private Item itemObject = null;
     private Menu menu;
+    private int seconds ;
+    private boolean running;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,19 +40,30 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
         TextView login = (TextView)findViewById(R.id.login);
         login.setText(itemObject.getLogin());
 
-        initPassword();
-        initTimer();
+        if(savedInstanceState != null && (running = savedInstanceState.getBoolean("running"))
+                && (seconds = savedInstanceState.getInt("seconds")) != 0){
+            setPassword(savedInstanceState.getString("password"));
+            runTimer();
+        }else{
+            setPassword(Utils.STARS);
+            initTimer();
+        }
     }
 
-    private void initPassword(){
+    private void setPassword(String value){
         TextView password = (TextView)findViewById(R.id.password);
-        password.setText("**********");
+        password.setText(value);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_display, menu);
         this.menu = menu;
+
+        if(running){
+            controlMenuItem(R.id.action_show_pwd, false);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -73,10 +88,10 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
         try{
             Password object = (Password) getPasswordQueryBuilder().queryForFirst();
             if(EncUtil.decryptData(object.getPassword()).equals(appPass)){
-                TextView password = (TextView)findViewById(R.id.password);
-                password.setText(EncUtil.decryptData(itemObject.getPassword()));
+                setPassword(EncUtil.decryptData(itemObject.getPassword()));
                 runTimer();
                 controlMenuItem(R.id.action_show_pwd, false);
+                running = true;
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -94,7 +109,7 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
         timeView.setText("");
     }
 
-    private int seconds ;
+
     private void runTimer(){
         final TextView timeView = (TextView)findViewById(R.id.watch);
         final Handler handler = new Handler();
@@ -110,12 +125,29 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
                 if(seconds >= 0){
                     handler.postDelayed(this, 1000);
                 }else{
-                    initPassword();
+                    setPassword(Utils.STARS);
                     initTimer();
                     controlMenuItem(R.id.action_show_pwd, true);
+                    running = false;
                 }
             }
         });
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("running", running);
+        outState.putInt("seconds", seconds);
+        outState.putString("password", getPassword());
+    }
+
+    private String getPassword(){
+        Editable editable = ((EditText)findViewById(R.id.password)).getText();
+        if(editable != null){
+            return editable.toString();
+        }
+        return null;
     }
 
     public void onDialogNegativeClick(DialogFragment dialog){
