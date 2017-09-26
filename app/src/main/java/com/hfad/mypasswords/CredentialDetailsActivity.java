@@ -3,6 +3,7 @@ package com.hfad.mypasswords;
 import android.app.*;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
 
 
     private Item itemObject = null;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,12 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
         TextView login = (TextView)findViewById(R.id.login);
         login.setText(itemObject.getLogin());
 
+        initPassword();
+        initTimer();
+        //controlMenuItem(R.id.action_show_pwd, true);
+    }
+
+    private void initPassword(){
         TextView password = (TextView)findViewById(R.id.password);
         password.setText("******");
     }
@@ -41,6 +49,7 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_display, menu);
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -67,13 +76,47 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
             if(EncUtil.decryptData(object.getPassword()).equals(appPass)){
                 TextView password = (TextView)findViewById(R.id.password);
                 password.setText(EncUtil.decryptData(itemObject.getPassword()));
+                runTimer();
+                controlMenuItem(R.id.action_show_pwd, false);
             }
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void controlMenuItem(int id, boolean enabled){
+        menu.findItem(id).setEnabled(enabled);
+    }
 
 
+    private void initTimer(){
+        seconds = 60;
+        TextView timeView = (TextView)findViewById(R.id.watch);
+        timeView.setText("");
+    }
 
+    private int seconds ;
+    private void runTimer(){
+        final TextView timeView = (TextView)findViewById(R.id.watch);
+        final Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours = seconds/3600;
+                int minutes = (seconds%3600)/60;
+                int secs = seconds%60;
+                String time = String.format("%02d:%02d", minutes, secs);
+                timeView.setText("The password will be encrypted in: " + time + " seconds");
+                seconds--;
+                if(seconds >= 0){
+                    handler.postDelayed(this, 1000);
+                }else{
+                    initPassword();
+                    initTimer();
+                    controlMenuItem(R.id.action_show_pwd, true);
+                }
+            }
+        });
     }
 
     public void onDialogNegativeClick(DialogFragment dialog){
