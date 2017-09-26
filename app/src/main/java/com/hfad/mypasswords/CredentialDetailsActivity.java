@@ -38,12 +38,11 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
 
         initPassword();
         initTimer();
-        //controlMenuItem(R.id.action_show_pwd, true);
     }
 
     private void initPassword(){
         TextView password = (TextView)findViewById(R.id.password);
-        password.setText("******");
+        password.setText("**********");
     }
 
     @Override
