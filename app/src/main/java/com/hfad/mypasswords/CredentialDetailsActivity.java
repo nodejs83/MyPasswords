@@ -40,13 +40,12 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
         TextView login = (TextView)findViewById(R.id.login);
         login.setText(itemObject.getLogin());
 
-        if(savedInstanceState != null && (running = savedInstanceState.getBoolean("running"))
-                && (seconds = savedInstanceState.getInt("seconds")) != 0){
+        if(savedInstanceState != null && (running = savedInstanceState.getBoolean("running"))){
             setPassword(savedInstanceState.getString("password"));
-            runTimer();
+            //runTimer();
         }else{
             setPassword(Utils.STARS);
-            initTimer();
+            //initTimer();
         }
     }
 
@@ -89,7 +88,7 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
             Password object = (Password) getPasswordQueryBuilder().queryForFirst();
             if(EncUtil.decryptData(object.getPassword()).equals(appPass)){
                 setPassword(EncUtil.decryptData(itemObject.getPassword()));
-                runTimer();
+                //runTimer();
                 controlMenuItem(R.id.action_show_pwd, false);
                 running = true;
             }
@@ -116,7 +115,6 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
         handler.post(new Runnable() {
             @Override
             public void run() {
-                int hours = seconds/3600;
                 int minutes = (seconds%3600)/60;
                 int secs = seconds%60;
                 String time = String.format("%02d:%02d", minutes, secs);
@@ -125,15 +123,23 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
                 if(seconds >= 0){
                     handler.postDelayed(this, 1000);
                 }else{
-                    setPassword(Utils.STARS);
-                    initTimer();
-                    controlMenuItem(R.id.action_show_pwd, true);
-                    running = false;
+                    initConfig();
                 }
             }
         });
     }
 
+    private void initConfig(){
+        setPassword(Utils.STARS);
+        controlMenuItem(R.id.action_show_pwd, true);
+        running = false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        initConfig();
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
