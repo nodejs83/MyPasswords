@@ -19,9 +19,6 @@ import java.sql.SQLException;
 
 public class AddItemActivity extends BaseActivity {
 
-
-
-
     private String mode;
     private Integer groupId;
 
@@ -73,6 +70,9 @@ public class AddItemActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_cancel:
                 this.finish();
                 return true;
@@ -115,7 +115,7 @@ public class AddItemActivity extends BaseActivity {
         return true;
     }
 
-    private boolean addCredentialItem(){
+    protected boolean addCredentialItem(){
         String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         String login = ((EditText)findViewById(R.id.add_login)).getText().toString();
         String password = ((EditText)findViewById(R.id.add_password)).getText().toString();
@@ -138,26 +138,30 @@ public class AddItemActivity extends BaseActivity {
             dialog.show();
             return false;
         }else {
-            Item credentialItem = new Item();
-            credentialItem.setLogin(Utils.capitalize(login));
-            credentialItem.setName(Utils.capitalize(name));
-            try {
-                credentialItem.setPassword(EncUtil.encryptData(password));
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-
-            try {
-                if (groupId == null) {
-                    getHelper().getItemDao().create(credentialItem);
-                } else {
-                    credentialItem.setGroupItem(getHelper().getItemDao().queryForId(groupId));
-                    getHelper().getItemDao().create(credentialItem);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            persist(login, name, password);
             return true;
+        }
+    }
+
+    public void persist(String login, String name, String password){
+        Item credentialItem = new Item();
+        credentialItem.setLogin(Utils.capitalize(login));
+        credentialItem.setName(Utils.capitalize(name));
+        try {
+            credentialItem.setPassword(EncUtil.encryptData(password));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            if (groupId == null) {
+                getHelper().getItemDao().create(credentialItem);
+            } else {
+                credentialItem.setGroupItem(getHelper().getItemDao().queryForId(groupId));
+                getHelper().getItemDao().create(credentialItem);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

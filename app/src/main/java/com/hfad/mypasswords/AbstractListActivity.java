@@ -2,6 +2,7 @@ package com.hfad.mypasswords;
 
 import android.app.SearchManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
@@ -120,8 +121,24 @@ public abstract class AbstractListActivity extends BaseActivity {
                 }
             });
             alert.show();
+        }else if (item.getItemId() == 0){
+            Item currentItem =  getItemByPosition(info.position);
+            Intent intent = null;
+            if(currentItem.isGroup()){
+                intent = new Intent(this, GroupContentItemsActivity.class);
+            }else{
+                intent = new Intent(this, UpdateCredentialActivity.class);
+            }
+            intent.putExtra(Utils.ITEM_ID, (int) currentItem.getId());
+            intent.putExtra(Utils.MODE, Utils.CREDENTIAL);
+            intent.putExtra(Utils.GROUPID, getGroupId());
+            startActivity(intent);
         }
         return super.onContextItemSelected(item);
+    }
+
+    public Item getItemByPosition(int position){
+        return getArrayAdapter().getItem(position);
     }
 
 
