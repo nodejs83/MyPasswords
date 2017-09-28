@@ -54,7 +54,7 @@ public class GroupContentItemsActivity extends AbstractListActivity {
 
     public void removeItem(int position){
         try{
-            getHelper().getItemDao().deleteById(getArrayAdapter().getItem(position).getId());
+            getHelper().getItemDao().deleteById(getCustomArrayAdapter().getItem(position).getId());
         }catch(SQLException e){
             e.printStackTrace();
         }

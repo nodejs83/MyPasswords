@@ -33,7 +33,7 @@ public class MainActivity extends AbstractListActivity implements DialogFragment
 
     public void removeItem(int position){
         try{
-            final Item item = getArrayAdapter().getItem(position);
+            final Item item = getCustomArrayAdapter().getItem(position);
             getHelper().getItemDao().callBatchTasks(new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {

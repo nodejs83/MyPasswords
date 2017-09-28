@@ -12,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public abstract class AbstractListActivity extends BaseActivity {
 
 
 
-    private ArrayAdapter<Item> arrayAdapter;
+    private CustomArrayAdapter<Item> arrayAdapter;
     private Integer groupId;
     private List<Item> items = new ArrayList<Item>();
     private ListView listView;
@@ -41,7 +40,7 @@ public abstract class AbstractListActivity extends BaseActivity {
         setContentView(getActivityLayoutId());
         items = getItems();
         listView = (ListView) findViewById(getListViewId());
-        setAdapter();
+        //setAdapter();
         listView.setTextFilterEnabled(true);
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
@@ -50,7 +49,8 @@ public abstract class AbstractListActivity extends BaseActivity {
     }
 
     private void setAdapter(){
-        arrayAdapter = new ArrayAdapter<Item>(AbstractListActivity.this, android.R.layout.simple_list_item_1,getItems());
+        //arrayAdapter = new CurrentArrayAdapter<Item>(AbstractListActivity.this, android.R.layout.simple_list_item_1,getItems());
+        arrayAdapter = new CustomArrayAdapter<Item>(AbstractListActivity.this, R.layout.list_item,R.id.text1 ,getItems());
         listView.setAdapter(arrayAdapter);
     }
 
@@ -150,7 +150,7 @@ public abstract class AbstractListActivity extends BaseActivity {
     }
 
     public Item getItemByPosition(int position){
-        return getArrayAdapter().getItem(position);
+        return arrayAdapter.getItem(position);
     }
 
 
@@ -179,11 +179,11 @@ public abstract class AbstractListActivity extends BaseActivity {
         arrayAdapter.notifyDataSetChanged();
     }
 
-    public ArrayAdapter<Item> getArrayAdapter() {
+    public CustomArrayAdapter<Item> getCustomArrayAdapter() {
         return arrayAdapter;
     }
 
-    public void setArrayAdapter(ArrayAdapter<Item> arrayAdapter) {
+    public void setCustomArrayAdapter(CustomArrayAdapter<Item> arrayAdapter) {
         this.arrayAdapter = arrayAdapter;
     }
 
