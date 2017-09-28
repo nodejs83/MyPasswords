@@ -31,6 +31,8 @@ public abstract class AbstractListActivity extends BaseActivity {
     private ArrayAdapter<Item> arrayAdapter;
     private Integer groupId;
     private List<Item> items = new ArrayList<Item>();
+    private ListView listView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +40,18 @@ public abstract class AbstractListActivity extends BaseActivity {
         setGroupId();
         setContentView(getActivityLayoutId());
         items = getItems();
-        arrayAdapter = new ArrayAdapter<Item>(this, android.R.layout.simple_list_item_1,items );
-        ListView listView = (ListView) findViewById(getListViewId());
-        listView.setAdapter(arrayAdapter);
+        listView = (ListView) findViewById(getListViewId());
+        setAdapter();
         listView.setTextFilterEnabled(true);
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
         checkApplicationPassword();
+    }
+
+    private void setAdapter(){
+        arrayAdapter = new ArrayAdapter<Item>(AbstractListActivity.this, android.R.layout.simple_list_item_1,getItems());
+        listView.setAdapter(arrayAdapter);
     }
 
     public abstract void checkApplicationPassword();
@@ -55,10 +61,17 @@ public abstract class AbstractListActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(getMenuId(), menu);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(getOnQueryTextListener());
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                setAdapter();
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -74,8 +87,7 @@ public abstract class AbstractListActivity extends BaseActivity {
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                arrayAdapter.getFilter().filter(query);
-                return true;
+                return false;
             }
         };
     }
@@ -154,15 +166,16 @@ public abstract class AbstractListActivity extends BaseActivity {
         refreshAdapter();
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        refreshAdapter();
-    }
 
     private void refreshAdapter(){
         items.clear();
-        items.addAll(getItems());
+        if(searchView != null && Utils.hasText(searchView.getQuery().toString())){
+            arrayAdapter.clear();
+            arrayAdapter.addAll(getItems());
+            arrayAdapter.getFilter().filter(searchView.getQuery());
+        }else{
+            setAdapter();
+        }
         arrayAdapter.notifyDataSetChanged();
     }
 
