@@ -52,6 +52,7 @@ public abstract class AbstractListActivity extends BaseActivity {
         //arrayAdapter = new CurrentArrayAdapter<Item>(AbstractListActivity.this, android.R.layout.simple_list_item_1,getItems());
         arrayAdapter = new CustomArrayAdapter<Item>(AbstractListActivity.this, R.layout.list_item,R.id.text1 ,getItems());
         listView.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
     }
 
     public abstract void checkApplicationPassword();

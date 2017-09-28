@@ -32,7 +32,7 @@ public class CustomArrayAdapter<T extends Item> extends ArrayAdapter<T> {
         final T item = getItem(position);
         if(item.isGroup()){
             ImageView imageView = (ImageView)view.findViewById(R.id.itemImage);
-            imageView.setImageResource(R.mipmap.ic_group);
+            imageView.setImageResource(R.drawable.ic_group);
         }
         return view;
     }
