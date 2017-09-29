@@ -20,7 +20,7 @@
     <string name="alert_no_button">NO</string>
 
     <string-array name="entry_types">
-        <item>Credential</item>
+        <item>Account</item>
         <item>Group</item>
     </string-array>
 

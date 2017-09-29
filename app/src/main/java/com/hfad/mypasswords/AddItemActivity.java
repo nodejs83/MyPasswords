@@ -34,26 +34,19 @@ public class AddItemActivity extends BaseActivity {
             if (savedInstanceState != null) {
                 return;
             }
-            AddCredentialFragment();
+            if(Utils.GROUP_UPDATE.equals(mode)){
+                AddGroupFragment();
+            }else{
+                AddCredentialFragment();
+            }
+
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //Spinner spinner =(Spinner) findViewById(R.id.entry_types);
-//        if(spinner.getSelectedItemPosition() == 0){
-//            ((EditText)findViewById(R.id.add_name)).requestFocus();
-            //InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
-            //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
-//        }else{
-//            ((EditText)findViewById(R.id.add_group_name)).requestFocus();
-//        }
-    }
 
     private void configView(){
         Spinner spinner = (Spinner) findViewById(R.id.entry_types);
-        if(Utils.CREDENTIAL.equals(mode)){
+        if(Utils.CREDENTIAL.equals(mode) || Utils.GROUP_UPDATE.equals(mode)){
             spinner.setVisibility(View.GONE);
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.add_item_layout);
             linearLayout.setPadding(0,50,0,0);
@@ -112,11 +105,16 @@ public class AddItemActivity extends BaseActivity {
         }
     }
 
-    private boolean addGroupItem(){
+    public boolean addGroupItem(){
         String name = ((EditText)findViewById(R.id.add_group_name)).getText().toString();
         if(!Utils.hasText(name)){
             return true;
         }
+        persistGroup(name);
+        return true;
+    }
+
+    public void persistGroup(String name){
         try {
             Item groupItem = new Item();
             groupItem.setName(Utils.capitalize(name));
@@ -125,7 +123,6 @@ public class AddItemActivity extends BaseActivity {
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return true;
     }
 
     protected boolean addCredentialItem(){
@@ -151,12 +148,12 @@ public class AddItemActivity extends BaseActivity {
             dialog.show();
             return false;
         }else {
-            persist(login, name, password);
+            persistCredential(login, name, password);
             return true;
         }
     }
 
-    public void persist(String login, String name, String password){
+    public void persistCredential(String login, String name, String password){
         Item credentialItem = new Item();
         credentialItem.setLogin(Utils.capitalize(login));
         credentialItem.setName(Utils.capitalize(name));
@@ -231,6 +228,11 @@ public class AddItemActivity extends BaseActivity {
     private void AddCredentialFragment(){
         AddCredentialFragment firstFragment = new AddCredentialFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
+    }
+
+    private void AddGroupFragment(){
+        AddGroupFragment fragment = new AddGroupFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
     }
 
     public Integer getGroupId() {

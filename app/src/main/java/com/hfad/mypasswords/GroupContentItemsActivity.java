@@ -69,6 +69,13 @@ public class GroupContentItemsActivity extends AbstractListActivity {
         }
     }
 
+    public void setActionBarTitle(){
+        String title = getIntent().getExtras() != null ? (String)getIntent().getExtras().get(Utils.GROUP_NAME) : Utils.EMPTY;
+        if(Utils.hasText(title)){
+            setTitle(title);
+        }
+    }
+
     public int getListViewId(){
         return  R.id.list_sub_items;
     }

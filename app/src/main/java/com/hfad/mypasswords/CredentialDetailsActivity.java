@@ -47,11 +47,19 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
             setPassword(Utils.STARS);
             //initTimer();
         }
+        setActionBarTitle();
     }
 
     private void setPassword(String value){
         TextView password = (TextView)findViewById(R.id.password);
         password.setText(value);
+    }
+
+    public void setActionBarTitle(){
+        String title = getIntent().getExtras() != null ? (String)getIntent().getExtras().get(Utils.GROUP_NAME) : Utils.EMPTY;
+        if(Utils.hasText(title)){
+            setTitle(title);
+        }
     }
 
     @Override

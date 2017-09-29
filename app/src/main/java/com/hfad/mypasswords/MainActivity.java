@@ -75,6 +75,7 @@ public class MainActivity extends AbstractListActivity implements DialogFragment
                     intent = new Intent(MainActivity.this, CredentialDetailsActivity.class);
                 }
                 intent.putExtra(Utils.ITEM_ID, (int) selected.getId());
+                intent.putExtra(Utils.GROUP_NAME, selected.getName());
                 startActivity(intent);
             }
         };

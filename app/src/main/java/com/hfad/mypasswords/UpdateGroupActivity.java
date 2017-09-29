@@ -1,34 +1,29 @@
 package com.hfad.mypasswords;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hfad.mypasswords.data.Item;
 
 /**
- * Created by a602256 on 26/09/2017.
+ * Created by a602256 on 29/09/2017.
  */
 
-public class UpdateCredentialActivity extends AddItemActivity {
+public class UpdateGroupActivity extends AddItemActivity {
 
-    private int credentialId;
+    private int groupId;
     private Item item;
+
+
 
     @Override
     protected void onStart() {
         super.onStart();
         try{
-            credentialId = (Integer)getIntent().getExtras().get(Utils.ITEM_ID);
-            item = (Item)getItemQueryBuilder().where().eq("id", credentialId).queryForFirst();
-            setEditText(R.id.add_name ,item.getName() );
-            setEditText(R.id.add_login , item.getLogin());
-            setEditText(R.id.add_password, EncUtil.decryptData(item.getPassword()));
+            groupId = (Integer)getIntent().getExtras().get(Utils.ITEM_ID);
+            item = (Item)getItemQueryBuilder().where().eq("id", groupId).queryForFirst();
+            setEditText(R.id.add_group_name ,item.getName() );
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -44,7 +39,7 @@ public class UpdateCredentialActivity extends AddItemActivity {
                 this.finish();
                 return true;
             case R.id.action_save:
-                boolean quit = addCredentialItem();
+                boolean quit = addGroupItem();
                 if(quit){
                     this.finish();
                 }
@@ -55,11 +50,9 @@ public class UpdateCredentialActivity extends AddItemActivity {
     }
 
     @Override
-    public void persistCredential(String login, String name, String password){
-        item.setLogin(Utils.capitalize(login));
+    public void persistGroup(String name){
         item.setName(Utils.capitalize(name));
         try {
-            item.setPassword(EncUtil.encryptData(password));
             getHelper().getItemDao().update(item);
         }catch(Exception e){
             e.printStackTrace();
@@ -69,5 +62,4 @@ public class UpdateCredentialActivity extends AddItemActivity {
     private void setEditText(int id, String value){
         ((EditText)findViewById(id)).setText(value, TextView.BufferType.EDITABLE);
     }
-
 }

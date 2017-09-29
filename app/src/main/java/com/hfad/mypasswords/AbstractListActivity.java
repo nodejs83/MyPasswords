@@ -46,6 +46,7 @@ public abstract class AbstractListActivity extends BaseActivity {
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
         checkApplicationPassword();
+        setActionBarTitle();
     }
 
     private void setAdapter(){
@@ -57,6 +58,8 @@ public abstract class AbstractListActivity extends BaseActivity {
     public abstract void checkApplicationPassword();
 
     public abstract List<Item> getItems();
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,13 +144,14 @@ public abstract class AbstractListActivity extends BaseActivity {
             Item currentItem =  getItemByPosition(info.position);
             Intent intent = null;
             if(currentItem.isGroup()){
-                intent = new Intent(this, GroupContentItemsActivity.class);
+                intent = new Intent(this, UpdateGroupActivity.class);
+                intent.putExtra(Utils.MODE, Utils.GROUP_UPDATE);
             }else{
                 intent = new Intent(this, UpdateCredentialActivity.class);
+                intent.putExtra(Utils.MODE, Utils.CREDENTIAL);
+                intent.putExtra(Utils.GROUPID, getGroupId());
             }
             intent.putExtra(Utils.ITEM_ID, (int) currentItem.getId());
-            intent.putExtra(Utils.MODE, Utils.CREDENTIAL);
-            intent.putExtra(Utils.GROUPID, getGroupId());
             startActivity(intent);
         }
         return super.onContextItemSelected(item);
@@ -208,4 +212,8 @@ public abstract class AbstractListActivity extends BaseActivity {
     public abstract AdapterView.OnItemClickListener getItemClickListener();
 
     public abstract void setGroupId();
+
+    public void setActionBarTitle(){
+        //Just to be overriden
+    }
 }
