@@ -38,6 +38,19 @@ public class AddItemActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Spinner spinner =(Spinner) findViewById(R.id.entry_types);
+//        if(spinner.getSelectedItemPosition() == 0){
+//            ((EditText)findViewById(R.id.add_name)).requestFocus();
+            //InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
+            //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
+//        }else{
+//            ((EditText)findViewById(R.id.add_group_name)).requestFocus();
+//        }
+    }
+
     private void configView(){
         Spinner spinner = (Spinner) findViewById(R.id.entry_types);
         if(Utils.CREDENTIAL.equals(mode)){
@@ -191,7 +204,6 @@ public class AddItemActivity extends BaseActivity {
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Spinner mySpinner=(Spinner) findViewById(R.id.entry_types);
                 replaceFragment(position);
             }
 

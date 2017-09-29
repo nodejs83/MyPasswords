@@ -49,7 +49,6 @@ public abstract class AbstractListActivity extends BaseActivity {
     }
 
     private void setAdapter(){
-        //arrayAdapter = new CurrentArrayAdapter<Item>(AbstractListActivity.this, android.R.layout.simple_list_item_1,getItems());
         arrayAdapter = new CustomArrayAdapter<Item>(AbstractListActivity.this, R.layout.list_item,R.id.text1 ,getItems());
         listView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
@@ -82,8 +81,12 @@ public abstract class AbstractListActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText)
             {
-                arrayAdapter.getFilter().filter(newText);
-                return true;
+               if(Utils.hasText(newText)){
+                   arrayAdapter.getFilter().filter(newText);
+               }else{
+                   setAdapter();
+               }
+               return true;
             }
             @Override
             public boolean onQueryTextSubmit(String query)
