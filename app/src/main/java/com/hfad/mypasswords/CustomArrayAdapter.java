@@ -30,9 +30,11 @@ public class CustomArrayAdapter<T extends Item> extends ArrayAdapter<T> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
         final T item = getItem(position);
+        ImageView imageView = (ImageView)view.findViewById(R.id.itemImage);
         if(item.isGroup()){
-            ImageView imageView = (ImageView)view.findViewById(R.id.itemImage);
             imageView.setImageResource(R.drawable.ic_group);
+        }else{
+            imageView.setImageResource(R.drawable.ic_acount);
         }
         return view;
     }

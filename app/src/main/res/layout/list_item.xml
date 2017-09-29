@@ -10,7 +10,7 @@
         android:paddingRight="6dp"
         android:paddingLeft="1dp"
         android:tint="@color/myColor"
-        android:src="@drawable/ic_acount"/>
+        />
 
     <TextView
         android:id="@+id/text1"
