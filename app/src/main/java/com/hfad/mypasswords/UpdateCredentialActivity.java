@@ -28,7 +28,7 @@ public class UpdateCredentialActivity extends AddItemActivity {
             item = (Item)getItemQueryBuilder().where().eq("id", credentialId).queryForFirst();
             setEditText(R.id.add_name ,item.getName() );
             setEditText(R.id.add_login , item.getLogin());
-            setEditText(R.id.add_password, EncUtil.decryptData(item.getPassword()));
+            //setEditText(R.id.add_password, EncUtil.decryptData(item.getPassword()));
         }catch(Exception e){
             e.printStackTrace();
         }
