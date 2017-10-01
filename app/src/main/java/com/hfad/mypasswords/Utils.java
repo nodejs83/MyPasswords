@@ -18,6 +18,10 @@ public class Utils {
     public static final String NOINPUT = "No inputs";
     public static final String STARS = "**********";
     public static final String EMPTY = "";
+    public static final String CANCELABLE = "cancelable";
+    public static final String DIALOG = "DialogFragment";
+
+
 
 
 

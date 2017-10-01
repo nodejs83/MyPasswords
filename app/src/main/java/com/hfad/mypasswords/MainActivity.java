@@ -1,8 +1,12 @@
 package com.hfad.mypasswords;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,12 +17,14 @@ import com.hfad.mypasswords.data.Item;
 import com.hfad.mypasswords.data.Password;
 import com.j256.ormlite.stmt.DeleteBuilder;;
 
+
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 
-public class MainActivity extends AbstractListActivity implements DialogFragment.DialogListener{
+public class MainActivity extends AbstractListActivity {
 
 
     public List<Item> getItems(){
@@ -29,6 +35,8 @@ public class MainActivity extends AbstractListActivity implements DialogFragment
         }
         return null;
     }
+
+
 
 
     public void removeItem(int position){
@@ -82,34 +90,68 @@ public class MainActivity extends AbstractListActivity implements DialogFragment
         return itemClickListener;
     }
 
+    private boolean flag;
+    AlertDialog alertDialog;
+
     public void checkApplicationPassword(){
         try{
             Password password = (Password) getPasswordQueryBuilder().queryForFirst();
             if(password == null || !Utils.hasText(password.getPassword())){
-                DialogFragment dialogFragment = new DialogFragment();
-                dialogFragment.setListener(this);
-                dialogFragment.show(getFragmentManager(), "DialogFragment");
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setCancelable(false);
+                LayoutInflater inflater = getLayoutInflater();
+                builder.setView(inflater.inflate(R.layout.dialog_layout, null));
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
+                flag = true;
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
     }
 
-    public void onDialogPositiveClick(DialogFragment dialog){
-        String password = ((EditText)dialog.getDialog().findViewById(R.id.dialog_password)).getText().toString();
-        if(Utils.hasText(password)){
-            try{
-                Password object = new Password();
-                object.setPassword(EncUtil.encryptData(password));
-                getHelper().getPasswordDao().create(object);
-            } catch (Exception e){
-                e.printStackTrace();
+    public View.OnClickListener getDialogOnClickListener(){
+        return new View.OnClickListener(){
+            public void onClick(View v){
+                String password = getPasswordValue();
+                try{
+                    if(Utils.hasText(password)){
+                        Password object = new Password();
+                        object.setPassword(EncUtil.encryptData(password));
+                        getHelper().getPasswordDao().create(object);
+                        alertDialog.dismiss();
+                        flag = false;
+                    }else{
+                        TextView textView = ((TextView)alertDialog.findViewById(R.id.error_message));
+                        textView.setText("The password is mandatory");
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
-        }
+        };
     }
 
-    public void onDialogNegativeClick(DialogFragment dialog){
+    private String getPasswordValue(){
+        return ((EditText)alertDialog.findViewById(R.id.dialog_password)).getText().toString();
+    }
 
+    public void setPasswordValue(String value){
+        ((EditText)alertDialog.findViewById(R.id.dialog_password)).setText(value, TextView.BufferType.EDITABLE);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("flag", flag);
+        if(flag){
+            outState.putString("password", getPasswordValue());
+        }
     }
 
 

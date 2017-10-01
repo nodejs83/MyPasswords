@@ -12,7 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +42,15 @@ public abstract class AbstractListActivity extends BaseActivity {
         setContentView(getActivityLayoutId());
         items = getItems();
         listView = (ListView) findViewById(getListViewId());
-        //setAdapter();
         listView.setTextFilterEnabled(true);
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
         checkApplicationPassword();
         setActionBarTitle();
+        if(savedInstanceState != null && savedInstanceState.getBoolean("flag")){
+           setPasswordValue(savedInstanceState.getString("password"));
+        }
     }
 
     private void setAdapter(){
@@ -58,7 +62,6 @@ public abstract class AbstractListActivity extends BaseActivity {
     public abstract void checkApplicationPassword();
 
     public abstract List<Item> getItems();
-
 
 
     @Override
@@ -214,6 +217,10 @@ public abstract class AbstractListActivity extends BaseActivity {
     public abstract void setGroupId();
 
     public void setActionBarTitle(){
+        //Just to be overriden
+    }
+
+    public void setPasswordValue(String value){
         //Just to be overriden
     }
 }

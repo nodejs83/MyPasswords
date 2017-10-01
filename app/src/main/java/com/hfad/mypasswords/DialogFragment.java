@@ -23,6 +23,7 @@ public class DialogFragment  extends android.app.DialogFragment {
     DialogListener mListener;
 
 
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -31,19 +32,19 @@ public class DialogFragment  extends android.app.DialogFragment {
 
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
-        builder.setView(inflater.inflate(R.layout.dialog_fragment, null))
-                // Add action buttons
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogPositiveClick(DialogFragment.this);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mListener.onDialogNegativeClick(DialogFragment.this);
-                    }
-                });
+        builder.setView(inflater.inflate(R.layout.dialog_fragment, null));
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    mListener.onDialogPositiveClick(DialogFragment.this);
+                }
+            });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                mListener.onDialogNegativeClick(DialogFragment.this);
+            }
+        });
         return builder.create();
     }
 
