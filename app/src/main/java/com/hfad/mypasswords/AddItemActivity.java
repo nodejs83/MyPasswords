@@ -158,7 +158,9 @@ public class AddItemActivity extends BaseActivity {
         credentialItem.setLogin(Utils.capitalize(login));
         credentialItem.setName(Utils.capitalize(name));
         try {
-            credentialItem.setPassword(EncUtil.encryptData(password));
+            if(Utils.hasText(password)){
+                credentialItem.setPassword(EncUtil.encryptData(password.trim()));
+            }
         }catch(Exception e){
             e.printStackTrace();
         }

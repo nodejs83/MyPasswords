@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,9 +36,6 @@ public class MainActivity extends AbstractListActivity {
         }
         return null;
     }
-
-
-
 
     public void removeItem(int position){
         try{
@@ -90,8 +88,8 @@ public class MainActivity extends AbstractListActivity {
         return itemClickListener;
     }
 
-    private boolean flag;
-    AlertDialog alertDialog;
+    private boolean running;
+    private AlertDialog alertDialog;
 
     public void checkApplicationPassword(){
         try{
@@ -107,8 +105,9 @@ public class MainActivity extends AbstractListActivity {
                 });
                 alertDialog = builder.create();
                 alertDialog.show();
+                alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
-                flag = true;
+                running = true;
             }
         } catch (SQLException e){
             e.printStackTrace();
@@ -119,16 +118,22 @@ public class MainActivity extends AbstractListActivity {
         return new View.OnClickListener(){
             public void onClick(View v){
                 String password = getPasswordValue();
+                String confirmed = getConfirmPasswordValue();
                 try{
-                    if(Utils.hasText(password)){
+                    if(Utils.hasText(password) && Utils.hasText(confirmed)
+                            && password.equals(confirmed)){
                         Password object = new Password();
                         object.setPassword(EncUtil.encryptData(password));
                         getHelper().getPasswordDao().create(object);
                         alertDialog.dismiss();
-                        flag = false;
-                    }else{
+                        running = false;
+                    }else if(!Utils.hasText(password) && !Utils.hasText(confirmed)){
                         TextView textView = ((TextView)alertDialog.findViewById(R.id.error_message));
                         textView.setText("The password is mandatory");
+                        textView.setVisibility(View.VISIBLE);
+                    }else{
+                        TextView textView = ((TextView)alertDialog.findViewById(R.id.error_message));
+                        textView.setText("The passwords do not match");
                         textView.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e){
@@ -142,16 +147,17 @@ public class MainActivity extends AbstractListActivity {
         return ((EditText)alertDialog.findViewById(R.id.dialog_password)).getText().toString();
     }
 
-    public void setPasswordValue(String value){
-        ((EditText)alertDialog.findViewById(R.id.dialog_password)).setText(value, TextView.BufferType.EDITABLE);
+    private String getConfirmPasswordValue(){
+        return ((EditText)alertDialog.findViewById(R.id.confirm_dialog_password)).getText().toString();
+    }
+
+    public void setRunning(boolean running){
+        this.running = running;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("flag", flag);
-        if(flag){
-            outState.putString("password", getPasswordValue());
-        }
+          outState.putBoolean("running", running);
     }
 
 

@@ -37,6 +37,7 @@ public class Utils {
         if (str == null || (strLen = str.length()) == 0) {
             return str;
         }
+        str.trim();
         return new StringBuffer(strLen)
              .append(Character.toTitleCase(str.charAt(0))).append(str.substring(1))
              .toString();

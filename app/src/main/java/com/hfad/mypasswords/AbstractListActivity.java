@@ -46,11 +46,12 @@ public abstract class AbstractListActivity extends BaseActivity {
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
-        checkApplicationPassword();
-        setActionBarTitle();
-        if(savedInstanceState != null && savedInstanceState.getBoolean("flag")){
-           setPasswordValue(savedInstanceState.getString("password"));
+        if(savedInstanceState == null || !savedInstanceState.getBoolean("running")){
+            checkApplicationPassword();
+        }else{
+            setRunning(savedInstanceState.getBoolean("running"));
         }
+        setActionBarTitle();
     }
 
     private void setAdapter(){
@@ -220,7 +221,7 @@ public abstract class AbstractListActivity extends BaseActivity {
         //Just to be overriden
     }
 
-    public void setPasswordValue(String value){
+    public void setRunning(boolean running){
         //Just to be overriden
     }
 }

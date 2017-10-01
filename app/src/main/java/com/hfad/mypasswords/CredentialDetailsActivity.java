@@ -1,27 +1,30 @@
 package com.hfad.mypasswords;
 
 import android.app.*;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.hfad.mypasswords.data.*;
 
 import java.sql.SQLException;
 
-public class CredentialDetailsActivity extends BaseActivity implements DialogFragment.DialogListener{
+public class CredentialDetailsActivity extends BaseActivity{
 
 
     private Item itemObject = null;
     private Menu menu;
-    private int seconds ;
-    private boolean running;
+    private AlertDialog alertDialog;
 
 
     @Override
@@ -39,13 +42,8 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
 
         TextView login = (TextView)findViewById(R.id.login);
         login.setText(itemObject.getLogin());
-
-        if(savedInstanceState != null && (running = savedInstanceState.getBoolean("running"))){
-            setPassword(savedInstanceState.getString("password"));
-            //runTimer();
-        }else{
+        if(Utils.hasText(itemObject.getPassword())){
             setPassword(Utils.STARS);
-            //initTimer();
         }
         setActionBarTitle();
     }
@@ -65,14 +63,16 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_display, menu);
+
         this.menu = menu;
 
-        if(running){
+        if(!Utils.hasText(itemObject.getPassword())){
             controlMenuItem(R.id.action_show_pwd, false);
         }
 
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -81,91 +81,70 @@ public class CredentialDetailsActivity extends BaseActivity implements DialogFra
                 finish();
                 return true;
             case R.id.action_show_pwd:
-                DialogFragment dialogFragment = new DialogFragment();
-                dialogFragment.setListener(this);
-                dialogFragment.show(getFragmentManager(), "DialogFragment");
+                AlertDialog.Builder builder = new AlertDialog.Builder(CredentialDetailsActivity.this);
+                LayoutInflater inflater = getLayoutInflater();
+                builder.setView(inflater.inflate(R.layout.dialog_fragment, null));
+                builder.setCancelable(false);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void onDialogPositiveClick(DialogFragment dialog){
-        String appPass = ((EditText)dialog.getDialog().findViewById(R.id.dialog_password)).getText().toString();
-        try{
-            Password object = (Password) getPasswordQueryBuilder().queryForFirst();
-            if(EncUtil.decryptData(object.getPassword()).equals(appPass)){
-                setPassword(EncUtil.decryptData(itemObject.getPassword()));
-                //runTimer();
-                controlMenuItem(R.id.action_show_pwd, false);
-                running = true;
+    public View.OnClickListener getDialogOnClickListener(){
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                String appPass = ((EditText) alertDialog.findViewById(R.id.dialog_password)).getText().toString();
+                try {
+                    if(Utils.hasText(appPass)){
+                        Password object = (Password) getPasswordQueryBuilder().queryForFirst();
+                        if (EncUtil.decryptData(object.getPassword()).equals(appPass)) {
+                            setPassword(EncUtil.decryptData(itemObject.getPassword()));
+                            controlMenuItem(R.id.action_show_pwd, false);
+                            alertDialog.dismiss();
+                        }else{
+                            TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
+                            textView.setText("The password is not correct");
+                            textView.setVisibility(View.VISIBLE);
+                        }
+                    }else{
+                        TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
+                        textView.setText("The password is mandatory");
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        };
     }
 
     private void controlMenuItem(int id, boolean enabled){
         menu.findItem(id).setEnabled(enabled);
     }
 
-
-    private void initTimer(){
-        seconds = 60;
-        TextView timeView = (TextView)findViewById(R.id.watch);
-        timeView.setText("");
-    }
-
-
-    private void runTimer(){
-        final TextView timeView = (TextView)findViewById(R.id.watch);
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                int minutes = (seconds%3600)/60;
-                int secs = seconds%60;
-                String time = String.format("%02d:%02d", minutes, secs);
-                timeView.setText("The password will be encrypted in: " + time + " seconds");
-                seconds--;
-                if(seconds >= 0){
-                    handler.postDelayed(this, 1000);
-                }else{
-                    initConfig();
-                }
-            }
-        });
-    }
-
     private void initConfig(){
         setPassword(Utils.STARS);
         controlMenuItem(R.id.action_show_pwd, true);
-        running = false;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         initConfig();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean("running", running);
-        outState.putInt("seconds", seconds);
-        outState.putString("password", getPassword());
-    }
-
-    private String getPassword(){
-        Editable editable = ((EditText)findViewById(R.id.password)).getText();
-        if(editable != null){
-            return editable.toString();
-        }
-        return null;
-    }
-
-    public void onDialogNegativeClick(DialogFragment dialog){
-        dialog.dismiss();
     }
 
 }

@@ -59,7 +59,11 @@ public class UpdateCredentialActivity extends AddItemActivity {
         item.setLogin(Utils.capitalize(login));
         item.setName(Utils.capitalize(name));
         try {
-            item.setPassword(EncUtil.encryptData(password));
+            if(Utils.hasText(password)){
+                item.setPassword(EncUtil.encryptData(password.trim()));
+            }else{
+                item.setPassword(Utils.EMPTY);
+            }
             getHelper().getItemDao().update(item);
         }catch(Exception e){
             e.printStackTrace();
