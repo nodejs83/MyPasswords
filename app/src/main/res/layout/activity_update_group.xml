@@ -5,18 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="40dp"
-    android:layout_marginLeft="40dp"
-    android:layout_marginRight="40dp"
-    android:layout_marginTop="0dp"
     android:orientation="vertical">
 
     <EditText
         android:id="@+id/update_group_name"
         android:inputType="text"
         android:maxLines="1"
-
-
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/name_hint"

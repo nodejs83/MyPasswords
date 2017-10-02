@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.hfad.mypasswords.data.Item;;
 
@@ -28,6 +29,15 @@ public class AddItemActivity extends BaseActivity {
         setContentView(R.layout.activity_add_item);
         getExtras();
         configView();
+        if(savedInstanceState != null){
+            if(Utils.CREDENTIAL.equals(mode) || !isGroup()){
+                setEditText(R.id.add_name , savedInstanceState.getString(Utils.NAME) );
+                setEditText(R.id.add_login , savedInstanceState.getString(Utils.LOGIN));
+                setEditText(R.id.add_password , savedInstanceState.getString(Utils.PASSWORD));
+            }else{
+                setEditText(R.id.add_name , savedInstanceState.getString(Utils.NAME) );
+            }
+        }
     }
 
 
@@ -39,6 +49,7 @@ public class AddItemActivity extends BaseActivity {
             linearLayout.setPadding(0,50,0,0);
         }else{
             spinner.setVisibility(View.VISIBLE);
+            spinner.setSelection(0);
             spinner.setOnItemSelectedListener(getOnItemSelectedListener());
         }
     }
@@ -74,7 +85,7 @@ public class AddItemActivity extends BaseActivity {
                 boolean isGroup = false;
 
                 if(groupId == null){
-                    isGroup = ((Spinner) findViewById(R.id.entry_types)).getSelectedItemPosition() == 1;
+                    isGroup = isGroup();
                 }
 
                 boolean quit = false;
@@ -92,6 +103,10 @@ public class AddItemActivity extends BaseActivity {
         }
     }
 
+    private boolean isGroup(){
+        return ((Spinner) findViewById(R.id.entry_types)).getSelectedItemPosition() == 1;
+    }
+
     public boolean addGroupItem(){
         String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         if(!Utils.hasText(name)){
@@ -99,6 +114,19 @@ public class AddItemActivity extends BaseActivity {
         }
         persistGroup(name);
         return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(Utils.CREDENTIAL.equals(mode)){
+            outState.putString(Utils.NAME, getEditTextValue(R.id.add_name));
+            outState.putString(Utils.LOGIN, getEditTextValue(R.id.add_login));
+            outState.putString(Utils.PASSWORD, getEditTextValue(R.id.add_password));
+        }else{
+            outState.putString(Utils.NAME, getEditTextValue(R.id.add_name));
+        }
+
     }
 
     public void persistGroup(String name){
@@ -190,6 +218,9 @@ public class AddItemActivity extends BaseActivity {
     }
 
     private void changeView(int position){
+//        setEditText(R.id.add_name , Utils.EMPTY);
+//        setEditText(R.id.add_login , Utils.EMPTY);
+//        setEditText(R.id.add_password , Utils.EMPTY);
         if(position == 0){
             ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
             ((EditText)findViewById(R.id.add_login)).setVisibility(View.VISIBLE);
@@ -199,6 +230,14 @@ public class AddItemActivity extends BaseActivity {
             ((EditText)findViewById(R.id.add_login)).setVisibility(View.INVISIBLE);
             ((EditText)findViewById(R.id.add_password)).setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void setEditText(int id, String value){
+        ((EditText)findViewById(id)).setText(value, TextView.BufferType.EDITABLE);
+    }
+
+    private String getEditTextValue(int id){
+        return ((EditText)findViewById(id)).getText().toString();
     }
 
 

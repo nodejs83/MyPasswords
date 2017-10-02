@@ -19,7 +19,6 @@ public class Utils {
     public static final String STARS = "**********";
     public static final String EMPTY = "";
     public static final String CANCELABLE = "cancelable";
-    public static final String DIALOG = "DialogFragment";
 
     public static final String NAME = "name";
     public static final String LOGIN = "login";
