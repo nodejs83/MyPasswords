@@ -26,27 +26,14 @@ public class AddItemActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-
         getExtras();
         configView();
-
-        if (findViewById(R.id.fragment_container) != null) {
-            if (savedInstanceState != null) {
-                return;
-            }
-            if(Utils.GROUP_UPDATE.equals(mode)){
-                AddGroupFragment();
-            }else{
-                AddCredentialFragment();
-            }
-
-        }
     }
 
 
     private void configView(){
         Spinner spinner = (Spinner) findViewById(R.id.entry_types);
-        if(Utils.CREDENTIAL.equals(mode) || Utils.GROUP_UPDATE.equals(mode)){
+        if(Utils.CREDENTIAL.equals(mode)){
             spinner.setVisibility(View.GONE);
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.add_item_layout);
             linearLayout.setPadding(0,50,0,0);
@@ -106,7 +93,7 @@ public class AddItemActivity extends BaseActivity {
     }
 
     public boolean addGroupItem(){
-        String name = ((EditText)findViewById(R.id.add_group_name)).getText().toString();
+        String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         if(!Utils.hasText(name)){
             return true;
         }
@@ -192,7 +179,7 @@ public class AddItemActivity extends BaseActivity {
         return new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                replaceFragment(position);
+                changeView(position);
             }
 
             @Override
@@ -202,29 +189,18 @@ public class AddItemActivity extends BaseActivity {
         };
     }
 
-    private void replaceFragment(int position){
-        Fragment fragment = null;
+    private void changeView(int position){
         if(position == 0){
-            fragment = new AddCredentialFragment();
+            ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
+            ((EditText)findViewById(R.id.add_login)).setVisibility(View.VISIBLE);
+            ((EditText)findViewById(R.id.add_password)).setVisibility(View.VISIBLE);
         }else{
-            fragment = new AddGroupFragment();
+            ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
+            ((EditText)findViewById(R.id.add_login)).setVisibility(View.INVISIBLE);
+            ((EditText)findViewById(R.id.add_password)).setVisibility(View.INVISIBLE);
         }
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
     }
 
-
-
-    private void AddCredentialFragment(){
-        AddCredentialFragment firstFragment = new AddCredentialFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, firstFragment).commit();
-    }
-
-    private void AddGroupFragment(){
-        AddGroupFragment fragment = new AddGroupFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
-    }
 
     public Integer getGroupId() {
         return groupId;

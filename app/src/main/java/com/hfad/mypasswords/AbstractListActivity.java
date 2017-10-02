@@ -149,11 +149,8 @@ public abstract class AbstractListActivity extends BaseActivity {
             Intent intent = null;
             if(currentItem.isGroup()){
                 intent = new Intent(this, UpdateGroupActivity.class);
-                intent.putExtra(Utils.MODE, Utils.GROUP_UPDATE);
             }else{
                 intent = new Intent(this, UpdateCredentialActivity.class);
-                intent.putExtra(Utils.MODE, Utils.CREDENTIAL);
-                intent.putExtra(Utils.GROUPID, getGroupId());
             }
             intent.putExtra(Utils.ITEM_ID, (int) currentItem.getId());
             startActivity(intent);
