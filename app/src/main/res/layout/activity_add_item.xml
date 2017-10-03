@@ -18,6 +18,18 @@
         android:id="@+id/add_item_layout"
         >
 
+        <TextView android:id="@+id/error_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/error_color"
+            android:visibility="invisible"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="sans-serif"
+            android:textSize="17dp"/>
+
         <Spinner
             android:id="@+id/entry_types"
             android:layout_width="match_parent"
@@ -25,7 +37,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:entries="@array/entry_types" />
 
 

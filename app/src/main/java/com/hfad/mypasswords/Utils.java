@@ -23,10 +23,21 @@ public class Utils {
     public static final String NAME = "name";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
+    public static final String ERROR = "error";
 
 
 
-
+    public static String validateInputs(String name, String login, String password){
+        if(!Utils.hasText(name) && !Utils.hasText(login)
+                &&  !Utils.hasText(password) ){
+            return Utils.NOINPUT;
+        }else if (!Utils.hasText(name)){
+            return "* Enter a name";
+        }else if (!Utils.hasText(login) &&  !Utils.hasText(password)){
+            return "* Enter a login or a password";
+        }
+        return null;
+    }
 
 
 

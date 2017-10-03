@@ -1,6 +1,7 @@
 package com.hfad.mypasswords;
 
 import android.content.DialogInterface;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -34,6 +35,11 @@ public class AddItemActivity extends BaseActivity {
                 setEditText(R.id.add_name , savedInstanceState.getString(Utils.NAME) );
                 setEditText(R.id.add_login , savedInstanceState.getString(Utils.LOGIN));
                 setEditText(R.id.add_password , savedInstanceState.getString(Utils.PASSWORD));
+                if(Utils.hasText(savedInstanceState.getString(Utils.ERROR))){
+                    setTextView(R.id.error_msg, savedInstanceState.getString(Utils.ERROR));
+                    setTextViewVisibility(true);
+                }
+
             }else{
                 setEditText(R.id.add_name , savedInstanceState.getString(Utils.NAME) );
             }
@@ -119,14 +125,14 @@ public class AddItemActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(Utils.CREDENTIAL.equals(mode)){
+        if(Utils.CREDENTIAL.equals(mode) || !isGroup()){
             outState.putString(Utils.NAME, getEditTextValue(R.id.add_name));
             outState.putString(Utils.LOGIN, getEditTextValue(R.id.add_login));
             outState.putString(Utils.PASSWORD, getEditTextValue(R.id.add_password));
+            outState.putString(Utils.ERROR, getTextViewValue(R.id.error_msg));
         }else{
             outState.putString(Utils.NAME, getEditTextValue(R.id.add_name));
         }
-
     }
 
     public void persistGroup(String name){
@@ -144,21 +150,13 @@ public class AddItemActivity extends BaseActivity {
         String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
         String login = ((EditText)findViewById(R.id.add_login)).getText().toString();
         String password = ((EditText)findViewById(R.id.add_password)).getText().toString();
-        String error = validateInputs(name,login, password);
+        String error = Utils.validateInputs(name,login, password);
 
         if(Utils.NOINPUT.equals(error)){
             return true;
         }else if (Utils.hasText(error)){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle("Errors");
-            dialog.setMessage(error);
-            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
+            setTextView(R.id.error_msg, error);
+            setTextViewVisibility(true);
             return false;
         }else {
             persistCredential(login, name, password);
@@ -190,18 +188,6 @@ public class AddItemActivity extends BaseActivity {
         }
     }
 
-    private String validateInputs(String name, String login, String password){
-        if(!Utils.hasText(name) && !Utils.hasText(login)
-                &&  !Utils.hasText(password) ){
-            return Utils.NOINPUT;
-        }else if (!Utils.hasText(name)){
-            return "Enter a name";
-        }else if (!Utils.hasText(login) &&  !Utils.hasText(password)){
-            return "Enter a login or a password";
-        }
-        return null;
-    }
-
 
     private AdapterView.OnItemSelectedListener getOnItemSelectedListener(){
         return new AdapterView.OnItemSelectedListener() {
@@ -218,17 +204,14 @@ public class AddItemActivity extends BaseActivity {
     }
 
     private void changeView(int position){
-//        setEditText(R.id.add_name , Utils.EMPTY);
-//        setEditText(R.id.add_login , Utils.EMPTY);
-//        setEditText(R.id.add_password , Utils.EMPTY);
         if(position == 0){
             ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
             ((EditText)findViewById(R.id.add_login)).setVisibility(View.VISIBLE);
-            ((EditText)findViewById(R.id.add_password)).setVisibility(View.VISIBLE);
+            ((TextInputLayout)findViewById(R.id.password_layout)).setVisibility(View.VISIBLE);
         }else{
             ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
             ((EditText)findViewById(R.id.add_login)).setVisibility(View.INVISIBLE);
-            ((EditText)findViewById(R.id.add_password)).setVisibility(View.INVISIBLE);
+            ((TextInputLayout)findViewById(R.id.password_layout)).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -239,6 +222,28 @@ public class AddItemActivity extends BaseActivity {
     private String getEditTextValue(int id){
         return ((EditText)findViewById(id)).getText().toString();
     }
+
+    private String getTextViewValue(int id){
+        CharSequence charSequence = ((TextView)findViewById(id)).getText();
+        if(charSequence != null){
+            return charSequence.toString();
+        }
+        return null;
+    }
+
+    private void setTextView(int id, String value){
+        ((TextView) findViewById(R.id.error_msg)).setText(value);
+    }
+
+    private void setTextViewVisibility(boolean visible){
+        if(visible){
+            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.VISIBLE);
+        }else{
+            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.INVISIBLE);
+        }
+    }
+
+
 
 
     public Integer getGroupId() {

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -41,6 +42,10 @@ public class UpdateCredentialActivity extends BaseActivity {
             setEditText(R.id.update_name , savedInstanceState.getString(Utils.NAME) );
             setEditText(R.id.update_login , savedInstanceState.getString(Utils.LOGIN));
             setEditText(R.id.update_password , savedInstanceState.getString(Utils.PASSWORD));
+            if(Utils.hasText(savedInstanceState.getString(Utils.ERROR))){
+                setTextView(R.id.error_msg, savedInstanceState.getString(Utils.ERROR));
+                setTextViewVisibility(true);
+            }
         }
     }
 
@@ -50,6 +55,13 @@ public class UpdateCredentialActivity extends BaseActivity {
         outState.putString(Utils.NAME, getEditTextValue(R.id.update_name));
         outState.putString(Utils.LOGIN, getEditTextValue(R.id.update_login));
         outState.putString(Utils.PASSWORD, getEditTextValue(R.id.update_password));
+        outState.putString(Utils.ERROR, getTextViewValue(R.id.error_msg));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
 
@@ -57,38 +69,19 @@ public class UpdateCredentialActivity extends BaseActivity {
         String name = getEditTextValue(R.id.update_name);
         String login = getEditTextValue(R.id.update_login);
         String password = getEditTextValue(R.id.update_password);
-        String error = validateInputs(name,login, password);
+        String error = Utils.validateInputs(name,login, password);
 
         if(Utils.NOINPUT.equals(error)){
             return true;
         }else if (Utils.hasText(error)){
-            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            dialog.setTitle("Errors");
-            dialog.setMessage(error);
-            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
+            TextView errorMsg = (TextView) findViewById(R.id.error_msg);
+            errorMsg.setText(error);
+            errorMsg.setVisibility(View.VISIBLE);
             return false;
         }else {
             persistCredential(login, name, password);
             return true;
         }
-    }
-
-    private String validateInputs(String name, String login, String password){
-        if(!Utils.hasText(name) && !Utils.hasText(login)
-                &&  !Utils.hasText(password) ){
-            return Utils.NOINPUT;
-        }else if (!Utils.hasText(name)){
-            return "Enter a name";
-        }else if (!Utils.hasText(login) &&  !Utils.hasText(password)){
-            return "Enter a login or a password";
-        }
-        return null;
     }
 
 
@@ -133,6 +126,26 @@ public class UpdateCredentialActivity extends BaseActivity {
 
     private String getEditTextValue(int id){
         return ((EditText)findViewById(id)).getText().toString();
+    }
+
+    private void setTextView(int id, String value){
+        ((TextView) findViewById(R.id.error_msg)).setText(value);
+    }
+
+    private String getTextViewValue(int id){
+        CharSequence charSequence = ((TextView)findViewById(id)).getText();
+        if(charSequence != null){
+            return charSequence.toString();
+        }
+        return null;
+    }
+
+    private void setTextViewVisibility(boolean visible){
+        if(visible){
+            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.VISIBLE);
+        }else{
+            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.INVISIBLE);
+        }
     }
 
 }
