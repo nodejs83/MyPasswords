@@ -13,10 +13,6 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by a602256 on 04/09/2017.
- */
-
 public class BaseActivity extends AppCompatActivity {
 
 

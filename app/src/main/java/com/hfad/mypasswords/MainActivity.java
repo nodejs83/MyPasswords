@@ -28,6 +28,9 @@ import java.util.concurrent.Callable;
 public class MainActivity extends AbstractListActivity {
 
 
+    private boolean running;
+    private AlertDialog alertDialog;
+
     public List<Item> getItems(){
         try{
             return queryItems(getItemQueryBuilder().where().isNull(Utils.GROUPITEM_COLUMN).prepare());
@@ -88,8 +91,7 @@ public class MainActivity extends AbstractListActivity {
         return itemClickListener;
     }
 
-    private boolean running;
-    private AlertDialog alertDialog;
+
 
     public void checkApplicationPassword(){
         try{
@@ -99,7 +101,7 @@ public class MainActivity extends AbstractListActivity {
                 builder.setCancelable(false);
                 LayoutInflater inflater = getLayoutInflater();
                 builder.setView(inflater.inflate(R.layout.dialog_layout, null));
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
                 });
@@ -129,11 +131,11 @@ public class MainActivity extends AbstractListActivity {
                         running = false;
                     }else if(!Utils.hasText(password) && !Utils.hasText(confirmed)){
                         TextView textView = ((TextView)alertDialog.findViewById(R.id.error_message));
-                        textView.setText("The password is mandatory");
+                        textView.setText(getString(R.string.mandat_pwd_msg));
                         textView.setVisibility(View.VISIBLE);
                     }else{
                         TextView textView = ((TextView)alertDialog.findViewById(R.id.error_message));
-                        textView.setText("The passwords do not match");
+                        textView.setText(R.string.match_pwd_msg);
                         textView.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e){
@@ -157,7 +159,7 @@ public class MainActivity extends AbstractListActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-          outState.putBoolean("running", running);
+          outState.putBoolean(Utils.RUNNING, running);
     }
 
 

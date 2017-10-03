@@ -1,24 +1,14 @@
 package com.hfad.mypasswords;
 
-import android.content.Context;
-import android.content.DialogInterface;
+
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.util.AttributeSet;
+
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+
 
 import com.hfad.mypasswords.data.Item;
 
-import java.sql.SQLException;
-
-/**
- * Created by a602256 on 26/09/2017.
- */
 
 public class UpdateCredentialActivity extends BaseActivity {
 
@@ -36,15 +26,15 @@ public class UpdateCredentialActivity extends BaseActivity {
             e.printStackTrace();
         }
         if(savedInstanceState == null){
-            setEditText(R.id.update_name ,item.getName() );
-            setEditText(R.id.update_login , item.getLogin());
+            Utils.setEditTextValue(this,R.id.update_name ,item.getName() );
+            Utils.setEditTextValue(this,R.id.update_login , item.getLogin());
         }else{
-            setEditText(R.id.update_name , savedInstanceState.getString(Utils.NAME) );
-            setEditText(R.id.update_login , savedInstanceState.getString(Utils.LOGIN));
-            setEditText(R.id.update_password , savedInstanceState.getString(Utils.PASSWORD));
+            Utils.setEditTextValue(this,R.id.update_name , savedInstanceState.getString(Utils.NAME) );
+            Utils.setEditTextValue(this,R.id.update_login , savedInstanceState.getString(Utils.LOGIN));
+            Utils.setEditTextValue(this,R.id.update_password , savedInstanceState.getString(Utils.PASSWORD));
             if(Utils.hasText(savedInstanceState.getString(Utils.ERROR))){
-                setTextView(R.id.error_msg, savedInstanceState.getString(Utils.ERROR));
-                setTextViewVisibility(true);
+                Utils.setTextViewValue(this,R.id.error_msg, savedInstanceState.getString(Utils.ERROR));
+                Utils.setTextViewVisibility(this,true);
             }
         }
     }
@@ -52,10 +42,10 @@ public class UpdateCredentialActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(Utils.NAME, getEditTextValue(R.id.update_name));
-        outState.putString(Utils.LOGIN, getEditTextValue(R.id.update_login));
-        outState.putString(Utils.PASSWORD, getEditTextValue(R.id.update_password));
-        outState.putString(Utils.ERROR, getTextViewValue(R.id.error_msg));
+        outState.putString(Utils.NAME, Utils.getEditTextValue(this,R.id.update_name));
+        outState.putString(Utils.LOGIN, Utils.getEditTextValue(this,R.id.update_login));
+        outState.putString(Utils.PASSWORD, Utils.getEditTextValue(this,R.id.update_password));
+        outState.putString(Utils.ERROR, Utils.getEditTextValue(this,R.id.error_msg));
     }
 
     @Override
@@ -66,17 +56,16 @@ public class UpdateCredentialActivity extends BaseActivity {
 
 
     protected boolean updateCredentialItem(){
-        String name = getEditTextValue(R.id.update_name);
-        String login = getEditTextValue(R.id.update_login);
-        String password = getEditTextValue(R.id.update_password);
-        String error = Utils.validateInputs(name,login, password);
+        String name = Utils.getEditTextValue(this,R.id.update_name);
+        String login = Utils.getEditTextValue(this,R.id.update_login);
+        String password = Utils.getEditTextValue(this,R.id.update_password);
+        String error = Utils.validateInputs(this,name,login, password);
 
         if(Utils.NOINPUT.equals(error)){
             return true;
         }else if (Utils.hasText(error)){
-            TextView errorMsg = (TextView) findViewById(R.id.error_msg);
-            errorMsg.setText(error);
-            errorMsg.setVisibility(View.VISIBLE);
+            Utils.setTextViewValue(this, R.id.error_msg, error);
+            Utils.setTextViewVisibility(this, true);
             return false;
         }else {
             persistCredential(login, name, password);
@@ -120,32 +109,5 @@ public class UpdateCredentialActivity extends BaseActivity {
         }
     }
 
-    private void setEditText(int id, String value){
-        ((EditText)findViewById(id)).setText(value, TextView.BufferType.EDITABLE);
-    }
-
-    private String getEditTextValue(int id){
-        return ((EditText)findViewById(id)).getText().toString();
-    }
-
-    private void setTextView(int id, String value){
-        ((TextView) findViewById(R.id.error_msg)).setText(value);
-    }
-
-    private String getTextViewValue(int id){
-        CharSequence charSequence = ((TextView)findViewById(id)).getText();
-        if(charSequence != null){
-            return charSequence.toString();
-        }
-        return null;
-    }
-
-    private void setTextViewVisibility(boolean visible){
-        if(visible){
-            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.VISIBLE);
-        }else{
-            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.INVISIBLE);
-        }
-    }
 
 }

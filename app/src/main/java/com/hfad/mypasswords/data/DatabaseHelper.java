@@ -12,9 +12,6 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
-/**
- * Created by a602256 on 04/09/2017.
- */
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
@@ -35,7 +32,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
             TableUtils.createTable(connectionSource, Item.class);
             TableUtils.createTable(connectionSource, Password.class);
-            //getItemDao().create(DataBaseUtils.getItems());
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Unable to create datbases", e);
         }

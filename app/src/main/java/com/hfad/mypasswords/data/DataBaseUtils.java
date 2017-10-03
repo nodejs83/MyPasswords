@@ -1,6 +1,5 @@
 package com.hfad.mypasswords.data;
 
-import com.hfad.mypasswords.*;
 
 import java.util.ArrayList;
 import java.util.List;

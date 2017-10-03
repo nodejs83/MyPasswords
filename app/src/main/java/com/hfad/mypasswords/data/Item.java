@@ -4,9 +4,6 @@ import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
 
-/**
- * Created by a602256 on 04/09/2017.
- */
 
 public class Item implements Serializable {
 

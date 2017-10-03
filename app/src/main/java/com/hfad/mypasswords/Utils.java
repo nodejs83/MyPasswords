@@ -1,9 +1,11 @@
 package com.hfad.mypasswords;
 
 
-/**
- * Created by a602256 on 17/08/2017.
- */
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
 
 public class Utils {
 
@@ -13,12 +15,11 @@ public class Utils {
     public static final String GROUP_NAME = "groupName";
     public static final String MODE = "mode";
     public static final String CREDENTIAL = "Credential";
-    public static final String GROUP_UPDATE = "Group_update";
     public static final String GROUPITEM_COLUMN = "group_item";
     public static final String NOINPUT = "No inputs";
     public static final String STARS = "**********";
     public static final String EMPTY = "";
-    public static final String CANCELABLE = "cancelable";
+    public static final String RUNNING = "running";
 
     public static final String NAME = "name";
     public static final String LOGIN = "login";
@@ -27,19 +28,54 @@ public class Utils {
 
 
 
-    public static String validateInputs(String name, String login, String password){
+    public static String validateInputs(AppCompatActivity activity,String name, String login, String password){
         if(!Utils.hasText(name) && !Utils.hasText(login)
                 &&  !Utils.hasText(password) ){
             return Utils.NOINPUT;
         }else if (!Utils.hasText(name)){
-            return "* Enter a name";
+            return activity.getString(R.string.mandat_name_msg);
         }else if (!Utils.hasText(login) &&  !Utils.hasText(password)){
-            return "* Enter a login or a password";
+            return activity.getString(R.string.login_pwd_msg);
         }
         return null;
     }
 
 
+    public static void setEditTextValue(AppCompatActivity activity, int id, String value){
+        ((EditText)activity.findViewById(id)).setText(value, TextView.BufferType.EDITABLE);
+    }
+
+    public static String getEditTextValue(AppCompatActivity activity,int id){
+        return ((EditText)activity.findViewById(id)).getText().toString();
+    }
+
+    public static String getTextViewValue(AppCompatActivity activity,int id){
+        CharSequence charSequence = ((TextView)activity.findViewById(id)).getText();
+        if(charSequence != null){
+            return charSequence.toString();
+        }
+        return null;
+    }
+
+    public static void setTextViewValue(AppCompatActivity activity,int id, String value){
+        ((TextView) activity.findViewById(id)).setText(value);
+    }
+
+    public static void setTextViewVisibility(AppCompatActivity activity,boolean visible){
+        if(visible){
+            ((TextView) activity.findViewById(R.id.error_msg)).setVisibility(View.VISIBLE);
+        }else{
+            ((TextView) activity.findViewById(R.id.error_msg)).setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public static void setEditTextVisibility(AppCompatActivity activity,boolean visible, int id){
+        if(visible){
+            ((EditText) activity.findViewById(id)).setVisibility(View.VISIBLE);
+        }else{
+            ((EditText) activity.findViewById(id)).setVisibility(View.INVISIBLE);
+        }
+    }
 
     public static boolean hasText(String value){
         if(value != null && !value.isEmpty()){

@@ -1,11 +1,7 @@
 package com.hfad.mypasswords;
 
-import android.content.DialogInterface;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +9,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.hfad.mypasswords.data.Item;;
 
@@ -32,16 +27,16 @@ public class AddItemActivity extends BaseActivity {
         configView();
         if(savedInstanceState != null){
             if(Utils.CREDENTIAL.equals(mode) || !isGroup()){
-                setEditText(R.id.add_name , savedInstanceState.getString(Utils.NAME) );
-                setEditText(R.id.add_login , savedInstanceState.getString(Utils.LOGIN));
-                setEditText(R.id.add_password , savedInstanceState.getString(Utils.PASSWORD));
+                Utils.setEditTextValue(this,R.id.add_name , savedInstanceState.getString(Utils.NAME) );
+                Utils.setEditTextValue(this,R.id.add_login , savedInstanceState.getString(Utils.LOGIN));
+                Utils.setEditTextValue(this,R.id.add_password , savedInstanceState.getString(Utils.PASSWORD));
                 if(Utils.hasText(savedInstanceState.getString(Utils.ERROR))){
-                    setTextView(R.id.error_msg, savedInstanceState.getString(Utils.ERROR));
-                    setTextViewVisibility(true);
+                    Utils.setTextViewValue(this,R.id.error_msg, savedInstanceState.getString(Utils.ERROR));
+                    Utils.setTextViewVisibility(this,true);
                 }
 
             }else{
-                setEditText(R.id.add_name , savedInstanceState.getString(Utils.NAME) );
+                Utils.setEditTextValue(this,R.id.add_name , savedInstanceState.getString(Utils.NAME) );
             }
         }
     }
@@ -126,12 +121,12 @@ public class AddItemActivity extends BaseActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(Utils.CREDENTIAL.equals(mode) || !isGroup()){
-            outState.putString(Utils.NAME, getEditTextValue(R.id.add_name));
-            outState.putString(Utils.LOGIN, getEditTextValue(R.id.add_login));
-            outState.putString(Utils.PASSWORD, getEditTextValue(R.id.add_password));
-            outState.putString(Utils.ERROR, getTextViewValue(R.id.error_msg));
+            outState.putString(Utils.NAME, Utils.getEditTextValue(this,R.id.add_name));
+            outState.putString(Utils.LOGIN, Utils.getEditTextValue(this,R.id.add_login));
+            outState.putString(Utils.PASSWORD, Utils.getEditTextValue(this,R.id.add_password));
+            outState.putString(Utils.ERROR, Utils.getEditTextValue(this,R.id.error_msg));
         }else{
-            outState.putString(Utils.NAME, getEditTextValue(R.id.add_name));
+            outState.putString(Utils.NAME, Utils.getEditTextValue(this,R.id.add_name));
         }
     }
 
@@ -147,16 +142,16 @@ public class AddItemActivity extends BaseActivity {
     }
 
     protected boolean addCredentialItem(){
-        String name = ((EditText)findViewById(R.id.add_name)).getText().toString();
-        String login = ((EditText)findViewById(R.id.add_login)).getText().toString();
-        String password = ((EditText)findViewById(R.id.add_password)).getText().toString();
-        String error = Utils.validateInputs(name,login, password);
+        String name = Utils.getEditTextValue(this,R.id.add_name);
+        String login = Utils.getEditTextValue(this,R.id.add_login);
+        String password = Utils.getEditTextValue(this,R.id.add_password);
+        String error = Utils.validateInputs(this,name,login, password);
 
         if(Utils.NOINPUT.equals(error)){
             return true;
         }else if (Utils.hasText(error)){
-            setTextView(R.id.error_msg, error);
-            setTextViewVisibility(true);
+            Utils.setTextViewValue(this, R.id.error_msg, error);
+            Utils.setTextViewVisibility(this, true);
             return false;
         }else {
             persistCredential(login, name, password);
@@ -205,46 +200,15 @@ public class AddItemActivity extends BaseActivity {
 
     private void changeView(int position){
         if(position == 0){
-            ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
-            ((EditText)findViewById(R.id.add_login)).setVisibility(View.VISIBLE);
+            Utils.setEditTextVisibility(this, true, R.id.add_name);
+            Utils.setEditTextVisibility(this, true, R.id.add_login);
             ((TextInputLayout)findViewById(R.id.password_layout)).setVisibility(View.VISIBLE);
         }else{
-            ((EditText)findViewById(R.id.add_name)).setVisibility(View.VISIBLE);
-            ((EditText)findViewById(R.id.add_login)).setVisibility(View.INVISIBLE);
+            Utils.setEditTextVisibility(this, true, R.id.add_name);
+            Utils.setEditTextVisibility(this, false, R.id.add_login);
             ((TextInputLayout)findViewById(R.id.password_layout)).setVisibility(View.INVISIBLE);
         }
     }
-
-    private void setEditText(int id, String value){
-        ((EditText)findViewById(id)).setText(value, TextView.BufferType.EDITABLE);
-    }
-
-    private String getEditTextValue(int id){
-        return ((EditText)findViewById(id)).getText().toString();
-    }
-
-    private String getTextViewValue(int id){
-        CharSequence charSequence = ((TextView)findViewById(id)).getText();
-        if(charSequence != null){
-            return charSequence.toString();
-        }
-        return null;
-    }
-
-    private void setTextView(int id, String value){
-        ((TextView) findViewById(R.id.error_msg)).setText(value);
-    }
-
-    private void setTextViewVisibility(boolean visible){
-        if(visible){
-            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.VISIBLE);
-        }else{
-            ((TextView) findViewById(R.id.error_msg)).setVisibility(View.INVISIBLE);
-        }
-    }
-
-
-
 
     public Integer getGroupId() {
         return groupId;

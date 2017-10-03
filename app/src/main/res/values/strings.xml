@@ -18,6 +18,14 @@
     <string name="alert_title_label">Are you sure to delete this item ?</string>
     <string name="alert_yes_button">YES</string>
     <string name="alert_no_button">NO</string>
+    <string name="mandat_name_msg">* Enter a name</string>
+    <string name="login_pwd_msg">* Enter a login or a password</string>
+    <string name="ok">OK</string>
+    <string name="mandat_pwd_msg">The password is mandatory</string>
+    <string name="match_pwd_msg">The passwords do not match</string>
+    <string name="pwd_msg">The password is not correct</string>
+
+
 
     <string-array name="entry_types">
         <item>Account</item>

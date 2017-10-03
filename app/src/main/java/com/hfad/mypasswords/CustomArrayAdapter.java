@@ -15,9 +15,7 @@ import com.hfad.mypasswords.data.Item;
 
 import java.util.List;
 
-/**
- * Created by Khaled Jamal on 28/09/2017.
- */
+
 
 public class CustomArrayAdapter<T extends Item> extends ArrayAdapter<T> {
 

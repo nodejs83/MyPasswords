@@ -1,9 +1,5 @@
 package com.hfad.mypasswords;
 
-/**
- * Created by Khaled Jamal on 18/09/2017.
- */
-
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -15,8 +11,8 @@ public class EncUtil {
 
     private static final String ALGO = "AES/ECB/PKCS7Padding";
     private static final String SECRETKEY = "SIDDHARTH";
+    private final static String HEX = "0123456789ABCDEF";
 
-//    private static final String ALGO = "AES/CBC/PKCS7Padding";
 
     public static String encryptData(String cleartext)
             throws Exception {
@@ -80,7 +76,7 @@ public class EncUtil {
         }
         return result.toString();
     }
-    private final static String HEX = "0123456789ABCDEF";
+
     private static void appendHex(StringBuffer sb, byte b) {
         sb.append(HEX.charAt((b>>4)&0x0f)).append(HEX.charAt(b&0x0f));
     }

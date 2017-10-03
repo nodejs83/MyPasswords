@@ -12,18 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.hfad.mypasswords.data.Item;;
 
-/**
- * Created by Khaled Jamal on 29/08/2017.
- */
 
 public abstract class AbstractListActivity extends BaseActivity {
 
@@ -46,10 +41,10 @@ public abstract class AbstractListActivity extends BaseActivity {
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
-        if(savedInstanceState == null || !savedInstanceState.getBoolean("running")){
+        if(savedInstanceState == null || !savedInstanceState.getBoolean(Utils.RUNNING)){
             checkApplicationPassword();
         }else{
-            setRunning(savedInstanceState.getBoolean("running"));
+            setRunning(savedInstanceState.getBoolean(Utils.RUNNING));
         }
         setActionBarTitle();
     }
@@ -192,16 +187,8 @@ public abstract class AbstractListActivity extends BaseActivity {
         return arrayAdapter;
     }
 
-    public void setCustomArrayAdapter(CustomArrayAdapter<Item> arrayAdapter) {
-        this.arrayAdapter = arrayAdapter;
-    }
-
     public void setGroupId(Integer groupId) {
         this.groupId = groupId;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
     }
 
     public abstract int getListViewId();

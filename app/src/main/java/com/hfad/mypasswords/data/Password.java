@@ -4,9 +4,6 @@ import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
 
-/**
- * Created by Khaled Jamal on 23/09/2017.
- */
 
 public class Password implements Serializable {
 
@@ -22,6 +19,5 @@ public class Password implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
 }

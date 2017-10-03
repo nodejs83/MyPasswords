@@ -1,12 +1,10 @@
 package com.hfad.mypasswords;
 
-import android.app.*;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +23,7 @@ public class CredentialDetailsActivity extends BaseActivity{
     private Item itemObject = null;
     private Menu menu;
     private AlertDialog alertDialog;
+    private boolean running;
 
 
     @Override
@@ -43,15 +42,23 @@ public class CredentialDetailsActivity extends BaseActivity{
         TextView login = (TextView)findViewById(R.id.login);
         login.setText(itemObject.getLogin());
         if(Utils.hasText(itemObject.getPassword())){
-            setPassword(Utils.STARS);
+            Utils.setTextViewValue(this, R.id.password, Utils.STARS);
         }
         setActionBarTitle();
+
+        if(savedInstanceState != null && savedInstanceState.getBoolean(Utils.RUNNING)){
+            createAlertDialog();
+        }
     }
 
-    private void setPassword(String value){
-        TextView password = (TextView)findViewById(R.id.password);
-        password.setText(value);
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(running){
+            outState.putBoolean(Utils.RUNNING, running);
+        }
     }
+
 
     public void setActionBarTitle(){
         String title = getIntent().getExtras() != null ? (String)getIntent().getExtras().get(Utils.GROUP_NAME) : Utils.EMPTY;
@@ -81,26 +88,33 @@ public class CredentialDetailsActivity extends BaseActivity{
                 finish();
                 return true;
             case R.id.action_show_pwd:
-                AlertDialog.Builder builder = new AlertDialog.Builder(CredentialDetailsActivity.this);
-                LayoutInflater inflater = getLayoutInflater();
-                builder.setView(inflater.inflate(R.layout.dialog_fragment, null));
-                builder.setCancelable(false);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                alertDialog = builder.create();
-                alertDialog.show();
-                alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
+                createAlertDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void createAlertDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CredentialDetailsActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_fragment, null));
+        builder.setCancelable(true);
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel_label), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                running = false;
+                dialog.dismiss();
+            }
+        });
+        alertDialog = builder.create();
+        alertDialog.show();
+        running = true;
+        alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
     }
 
 
@@ -112,17 +126,18 @@ public class CredentialDetailsActivity extends BaseActivity{
                     if(Utils.hasText(appPass)){
                         Password object = (Password) getPasswordQueryBuilder().queryForFirst();
                         if (EncUtil.decryptData(object.getPassword()).equals(appPass)) {
-                            setPassword(EncUtil.decryptData(itemObject.getPassword()));
+                            Utils.setTextViewValue(CredentialDetailsActivity.this, R.id.password, EncUtil.decryptData(itemObject.getPassword()));
                             controlMenuItem(R.id.action_show_pwd, false);
+                            running = false;
                             alertDialog.dismiss();
                         }else{
                             TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
-                            textView.setText("The password is not correct");
+                            textView.setText(getString(R.string.pwd_msg));
                             textView.setVisibility(View.VISIBLE);
                         }
                     }else{
                         TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
-                        textView.setText("The password is mandatory");
+                        textView.setText(getString(R.string.mandat_pwd_msg));
                         textView.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception e) {
@@ -137,7 +152,7 @@ public class CredentialDetailsActivity extends BaseActivity{
     }
 
     private void initConfig(){
-        setPassword(Utils.STARS);
+        Utils.setTextViewValue(this ,R.id.password, Utils.STARS);
         controlMenuItem(R.id.action_show_pwd, true);
     }
 
