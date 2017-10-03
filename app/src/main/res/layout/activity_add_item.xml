@@ -37,7 +37,7 @@
             android:layout_marginBottom="20dp"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:entries="@array/entry_types" />
 
 
