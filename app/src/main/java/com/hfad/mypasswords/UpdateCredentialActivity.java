@@ -45,7 +45,7 @@ public class UpdateCredentialActivity extends BaseActivity {
         outState.putString(Utils.NAME, Utils.getEditTextValue(this,R.id.update_name));
         outState.putString(Utils.LOGIN, Utils.getEditTextValue(this,R.id.update_login));
         outState.putString(Utils.PASSWORD, Utils.getEditTextValue(this,R.id.update_password));
-        outState.putString(Utils.ERROR, Utils.getEditTextValue(this,R.id.error_msg));
+        outState.putString(Utils.ERROR, Utils.getTextViewValue(this,R.id.error_msg));
     }
 
     @Override

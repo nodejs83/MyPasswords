@@ -12,7 +12,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView android:id="@+id/error_message"
@@ -21,7 +21,7 @@
             android:visibility="invisible"
             android:textColor="@color/error_color"
             android:layout_marginBottom="5dp"
-            android:layout_margin="4dp"
+            android:layout_margin="10dp"
             android:fontFamily="sans-serif"
             android:textSize="17dp"/>
 
@@ -39,11 +39,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="sans-serif"
-                android:hint="Choose a password">
+                android:hint="@string/choose_pwd">
                 <requestFocus/>
             </EditText>
         </android.support.design.widget.TextInputLayout>
@@ -62,24 +62,13 @@
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
                 android:fontFamily="sans-serif"
-                android:hint="Confirm password">
+                android:hint="@string/confirm_password_hint">
             </EditText>
         </android.support.design.widget.TextInputLayout>
-
-        <TextView android:id="@+id/ps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:layout_marginBottom="0dp"
-            android:fontFamily="sans-serif"
-            android:textSize="17dp"
-            android:text="PS: Please try not to forget this password"
-            />
 
 </LinearLayout>
 </ScrollView>

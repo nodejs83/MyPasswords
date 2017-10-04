@@ -14,7 +14,7 @@ public class GroupContentItemsActivity extends AbstractListActivity {
 
     public List<Item> getItems(){
         try {
-            return queryItems(getItemQueryBuilder().where().eq(Utils.GROUPITEM_COLUMN, getGroupId()).prepare());
+            return queryItems(getItemQueryBuilder().orderBy(Utils.NAME, true).where().eq(Utils.GROUPITEM_COLUMN, getGroupId()).prepare());
         }catch (SQLException e){
             e.printStackTrace();
         }

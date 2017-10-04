@@ -47,7 +47,7 @@ public class AddItemActivity extends BaseActivity {
         if(Utils.CREDENTIAL.equals(mode)){
             spinner.setVisibility(View.GONE);
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.add_item_layout);
-            linearLayout.setPadding(0,50,0,0);
+            linearLayout.setPadding(0,0,0,0);
         }else{
             spinner.setVisibility(View.VISIBLE);
             spinner.setSelection(0);
@@ -124,7 +124,7 @@ public class AddItemActivity extends BaseActivity {
             outState.putString(Utils.NAME, Utils.getEditTextValue(this,R.id.add_name));
             outState.putString(Utils.LOGIN, Utils.getEditTextValue(this,R.id.add_login));
             outState.putString(Utils.PASSWORD, Utils.getEditTextValue(this,R.id.add_password));
-            outState.putString(Utils.ERROR, Utils.getEditTextValue(this,R.id.error_msg));
+            outState.putString(Utils.ERROR, Utils.getTextViewValue(this,R.id.error_msg));
         }else{
             outState.putString(Utils.NAME, Utils.getEditTextValue(this,R.id.add_name));
         }

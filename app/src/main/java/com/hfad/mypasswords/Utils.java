@@ -13,6 +13,7 @@ public class Utils {
     public static final String GROUPID = "GroupId";
     public static final String ITEM_ID = "itemId";
     public static final String GROUP_NAME = "groupName";
+
     public static final String MODE = "mode";
     public static final String CREDENTIAL = "Credential";
     public static final String GROUPITEM_COLUMN = "group_item";

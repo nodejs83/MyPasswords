@@ -33,7 +33,7 @@ public class MainActivity extends AbstractListActivity {
 
     public List<Item> getItems(){
         try{
-            return queryItems(getItemQueryBuilder().where().isNull(Utils.GROUPITEM_COLUMN).prepare());
+            return queryItems(getItemQueryBuilder().orderBy(Utils.NAME, true).where().isNull(Utils.GROUPITEM_COLUMN).prepare());
         } catch (SQLException e){
             e.printStackTrace();
         }

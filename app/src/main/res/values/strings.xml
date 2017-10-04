@@ -6,7 +6,7 @@
     <string name="add_order_title">Add</string>
     <string name="login_hint">Login</string>
     <string name="password_hint">Password</string>
-    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="confirm_password_hint">Confirm password</string>
     <string name="actions">Actions</string>
     <string name="name_hint">Name</string>
     <string name="description_hint">Description</string>
@@ -14,8 +14,8 @@
     <string name="delete_label">Delete</string>
     <string name="actions_label">Actions</string>
     <string name="cancel_label">Cancel</string>
-    <string name="alert_label">Alert!!</string>
-    <string name="alert_title_label">Are you sure to delete this item ?</string>
+    <string name="alert_label">Confirm delete</string>
+    <string name="alert_title_label">Are you sure you want to delete ?</string>
     <string name="alert_yes_button">YES</string>
     <string name="alert_no_button">NO</string>
     <string name="mandat_name_msg">* Enter a name</string>
@@ -24,6 +24,7 @@
     <string name="mandat_pwd_msg">The password is mandatory</string>
     <string name="match_pwd_msg">The passwords do not match</string>
     <string name="pwd_msg">The password is not correct</string>
+    <string name="choose_pwd">Choose a password"</string>
 
 
 
