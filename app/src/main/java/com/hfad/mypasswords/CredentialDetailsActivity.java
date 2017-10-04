@@ -59,13 +59,13 @@ public class CredentialDetailsActivity extends BaseActivity{
         }
     }
 
-
     public void setActionBarTitle(){
         String title = getIntent().getExtras() != null ? (String)getIntent().getExtras().get(Utils.GROUP_NAME) : Utils.EMPTY;
         if(Utils.hasText(title)){
             setTitle(title);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

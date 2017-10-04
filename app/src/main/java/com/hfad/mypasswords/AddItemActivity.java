@@ -25,6 +25,7 @@ public class AddItemActivity extends BaseActivity {
         setContentView(R.layout.activity_add_item);
         getExtras();
         configView();
+        setTitle(Utils.EMPTY);
         if(savedInstanceState != null){
             if(Utils.CREDENTIAL.equals(mode) || !isGroup()){
                 Utils.setEditTextValue(this,R.id.add_name , savedInstanceState.getString(Utils.NAME) );

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Passwords</string>
+    <string name="app_name">Passbook</string>
     <string name="title_activity_details">Details</string>
     <string name="login_label">Login  :  </string>
     <string name="password_label">Password  :  </string>
@@ -18,13 +18,19 @@
     <string name="alert_title_label">Are you sure you want to delete ?</string>
     <string name="alert_yes_button">YES</string>
     <string name="alert_no_button">NO</string>
-    <string name="mandat_name_msg">* Enter a name</string>
-    <string name="login_pwd_msg">* Enter a login or a password</string>
+    <string name="mandat_name_msg">Enter a name</string>
+    <string name="login_pwd_msg">Enter a login or a password</string>
     <string name="ok">OK</string>
     <string name="mandat_pwd_msg">The password is mandatory</string>
     <string name="match_pwd_msg">The passwords do not match</string>
     <string name="pwd_msg">The password is not correct</string>
-    <string name="choose_pwd">Choose a password"</string>
+    <string name="choose_pwd">Choose a password</string>
+    <string name="decrypt">Decrypt</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="send_me">Send me my data</string>
+    <string name="delete_all">Delete all</string>
+
 
 
 

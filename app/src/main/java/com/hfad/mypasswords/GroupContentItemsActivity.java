@@ -44,6 +44,7 @@ public class GroupContentItemsActivity extends AbstractListActivity {
                 Item selected = (Item) parent.getAdapter().getItem(position);
 
                 intent.putExtra(Utils.ITEM_ID, (int) selected.getId());
+                intent.putExtra(Utils.GROUP_NAME, selected.getName());
                 intent.putExtra(Utils.GROUPID, getGroupId());
                 startActivity(intent);
             }

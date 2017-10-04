@@ -4,12 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <item
-        android:id="@+id/menu_preferences"
+        android:id="@+id/menu_backup"
         app:showAsAction="never"
-        android:title="Preferences" >
+        android:title="Backup" >
         <menu>
-            <item android:id="@+id/delete_all"
-                android:title="Delete all" />
             <item android:id="@+id/send_me"
                 android:title="Send me my data" />
         </menu>

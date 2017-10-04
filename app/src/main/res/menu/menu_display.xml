@@ -5,7 +5,7 @@
     >
     <item
         android:id="@+id/action_show_pwd"
-        android:title="Show password"
+        android:title="@string/decrypt"
 
         android:orderInCategory="1"
         app:showAsAction="ifRoom"

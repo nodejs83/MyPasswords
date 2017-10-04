@@ -5,7 +5,7 @@
     >
     <item
         android:id="@+id/action_cancel"
-        android:title="Cancel"
+        android:title="@string/cancel_label"
 
         android:orderInCategory="1"
         app:showAsAction="ifRoom"
@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/action_save"
-        android:title="Save"
+        android:title="@string/save"
 
         android:orderInCategory="1"
         app:showAsAction="ifRoom"

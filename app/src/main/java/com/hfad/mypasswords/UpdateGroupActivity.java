@@ -30,6 +30,7 @@ public class UpdateGroupActivity  extends BaseActivity{
         }catch(SQLException e){
             e.printStackTrace();
         }
+        setTitle(Utils.EMPTY);
         if(savedInstanceState == null){
             Utils.setEditTextValue(this,R.id.update_group_name,item.getName());
         }else{

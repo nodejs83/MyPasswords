@@ -64,12 +64,23 @@ public class MainActivity extends AbstractListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = null;
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent intent = new Intent(this, AddItemActivity.class);
+                intent = new Intent(this, AddItemActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.send_me:
+                intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, "Hello");
+                String chooserTitle = "Backup";
+                Intent chosenIntent = Intent.createChooser(intent, chooserTitle);
+                startActivity(chosenIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return true;
     }
 
     public AdapterView.OnItemClickListener getItemClickListener(){

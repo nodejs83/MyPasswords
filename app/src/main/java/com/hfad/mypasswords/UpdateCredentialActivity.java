@@ -25,6 +25,7 @@ public class UpdateCredentialActivity extends BaseActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
+        setTitle(Utils.EMPTY);
         if(savedInstanceState == null){
             Utils.setEditTextValue(this,R.id.update_name ,item.getName() );
             Utils.setEditTextValue(this,R.id.update_login , item.getLogin());
