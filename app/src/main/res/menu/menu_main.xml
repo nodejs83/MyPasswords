@@ -4,6 +4,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <item
+        android:id="@+id/menu_preferences"
+        app:showAsAction="never"
+        android:title="Preferences" >
+        <menu>
+            <item android:id="@+id/delete_all"
+                android:title="Delete all" />
+            <item android:id="@+id/send_me"
+                android:title="Send me my data" />
+        </menu>
+    </item>
+
+
+    <item
         android:id="@+id/action_add"
         android:title="@string/add_order_title"
         android:icon="@drawable/ic_add_white_24dp"
