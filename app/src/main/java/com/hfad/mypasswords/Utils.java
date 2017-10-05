@@ -20,6 +20,7 @@ public class Utils {
     public static final String MODE = "mode";
     public static final String CREDENTIAL = "Credential";
     public static final String GROUPITEM_COLUMN = "group_item";
+    public static final String ISGROUP_COLUMN = "isGroup";
     public static final String NOINPUT = "No inputs";
     public static final String STARS = "**********";
     public static final String EMPTY = "";

@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menu_backup"
         app:showAsAction="never"
-        android:title="Backup" >
+        android:title="@string/backup" >
         <menu>
             <item android:id="@+id/send_me"
                 android:title="Send me my data" />

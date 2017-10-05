@@ -90,10 +90,39 @@ public class MainActivity extends AbstractListActivity {
     private void send(){
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Hello");
-        String chooserTitle = "Backup";
+        intent.putExtra(Intent.EXTRA_TEXT, getData().toString());
+        String chooserTitle = getString(R.string.backup);
         Intent chosenIntent = Intent.createChooser(intent, chooserTitle);
         startActivity(chosenIntent);
+    }
+
+    public StringBuffer getData(){
+        StringBuffer buffer = null;
+        try{
+            List<Item> items =  queryItems(getItemQueryBuilder().orderBy(Utils.NAME, true).where()
+                    .eq(Utils.ISGROUP_COLUMN, false).prepare());
+            if(items != null && !items.isEmpty()){
+                buffer = new StringBuffer();
+                for(Item item : items){
+                    buffer.append(item.getName());
+
+                    if(Utils.hasText(item.getLogin())){
+                        buffer.append(";");
+                        buffer.append(item.getLogin());
+                    }
+                    if(Utils.hasText(item.getPassword())){
+                        buffer.append(";");
+                        buffer.append(EncUtil.decryptData(item.getPassword()));
+                    }
+                    buffer.append("\n");
+                }
+            }
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return buffer;
     }
 
 
