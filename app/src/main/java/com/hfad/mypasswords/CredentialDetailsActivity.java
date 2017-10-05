@@ -97,7 +97,7 @@ public class CredentialDetailsActivity extends BaseActivity{
 
 
     private void createAlertDialog(){
-        alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener());
+        alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener(), true);
         alertDialog.show();
         running = true;
         alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

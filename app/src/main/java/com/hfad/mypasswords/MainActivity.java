@@ -80,7 +80,7 @@ public class MainActivity extends AbstractListActivity {
 
     @Override
     public void createAlertDialog(){
-        alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener());
+        alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener(), true);
         alertDialog.show();
         backup = true;
         alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -89,8 +89,9 @@ public class MainActivity extends AbstractListActivity {
 
     private void send(){
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
+        intent.setType(Utils.TEXT_PLAIN);
         intent.putExtra(Intent.EXTRA_TEXT, getData().toString());
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.backup));
         String chooserTitle = getString(R.string.backup);
         Intent chosenIntent = Intent.createChooser(intent, chooserTitle);
         startActivity(chosenIntent);
@@ -99,22 +100,27 @@ public class MainActivity extends AbstractListActivity {
     public StringBuffer getData(){
         StringBuffer buffer = null;
         try{
+            Password object = (Password) getPasswordQueryBuilder().queryForFirst();
+            buffer = new StringBuffer();
+            buffer.append(Utils.FIRST + getString(R.string.application_pwd) + Utils.DOTS + EncUtil.decryptData(object.getPassword()));
+            buffer.append(Utils.RETURN + Utils.RETURN);
             List<Item> items =  queryItems(getItemQueryBuilder().orderBy(Utils.NAME, true).where()
                     .eq(Utils.ISGROUP_COLUMN, false).prepare());
             if(items != null && !items.isEmpty()){
-                buffer = new StringBuffer();
+                int i = 2;
                 for(Item item : items){
-                    buffer.append(item.getName());
+                    buffer.append(i + Utils.MINUS + item.getName() + Utils.DOTS + Utils.RETURN);
 
                     if(Utils.hasText(item.getLogin())){
-                        buffer.append(";");
-                        buffer.append(item.getLogin());
+                        buffer.append(Utils.TAB + getString(R.string.login) + Utils.DOTS);
+                        buffer.append(item.getLogin() + Utils.RETURN);
                     }
                     if(Utils.hasText(item.getPassword())){
-                        buffer.append(";");
-                        buffer.append(EncUtil.decryptData(item.getPassword()));
+                        buffer.append(Utils.TAB + getString(R.string.pwd) + Utils.DOTS);
+                        buffer.append(EncUtil.decryptData(item.getPassword()) + Utils.RETURN);
                     }
-                    buffer.append("\n");
+                    buffer.append(Utils.RETURN);
+                    i++;
                 }
             }
 
@@ -188,7 +194,7 @@ public class MainActivity extends AbstractListActivity {
         try{
             Password password = (Password) getPasswordQueryBuilder().queryForFirst();
             if(password == null || !Utils.hasText(password.getPassword())){
-                alertDialog = Utils.getAlertDialog(R.layout.dialog_layout, this, getOkListener(), null);
+                alertDialog = Utils.getAlertDialog(R.layout.dialog_layout, this, getOkListener(), null, false);
                 alertDialog.show();
                 alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());

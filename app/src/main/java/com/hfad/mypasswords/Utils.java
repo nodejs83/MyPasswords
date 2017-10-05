@@ -26,6 +26,12 @@ public class Utils {
     public static final String EMPTY = "";
     public static final String RUNNING = "running";
     public static final String ISBACKUP = "isBackup";
+    public static final String TEXT_PLAIN = "text/plain";
+    public static final String RETURN = "\n";
+    public static final String TAB = "\t";
+    public static final String FIRST = "1 - ";
+    public static final String DOTS = ": ";
+    public static final String MINUS = " - ";
 
     public static final String NAME = "name";
     public static final String LOGIN = "login";
@@ -49,11 +55,11 @@ public class Utils {
 
     public static AlertDialog getAlertDialog(int layoutId, AppCompatActivity activity,
                                              DialogInterface.OnClickListener okListener,
-                                             DialogInterface.OnClickListener cancelListener){
+                                             DialogInterface.OnClickListener cancelListener, boolean concelable){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = activity.getLayoutInflater();
         builder.setView(inflater.inflate(layoutId, null));
-        builder.setCancelable(true);
+        builder.setCancelable(concelable);
         builder.setPositiveButton(activity.getString(R.string.ok), okListener);
         if(cancelListener != null){
             builder.setNegativeButton(activity.getString(R.string.cancel_label), cancelListener);
