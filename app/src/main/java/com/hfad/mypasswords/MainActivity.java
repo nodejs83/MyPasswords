@@ -30,6 +30,7 @@ public class MainActivity extends AbstractListActivity {
 
     private boolean running;
     private AlertDialog alertDialog;
+    private boolean backup;
 
     public List<Item> getItems(){
         try{
@@ -64,23 +65,73 @@ public class MainActivity extends AbstractListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = null;
         switch (item.getItemId()) {
             case R.id.action_add:
-                intent = new Intent(this, AddItemActivity.class);
+                Intent intent = new Intent(this, AddItemActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.send_me:
-                intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, "Hello");
-                String chooserTitle = "Backup";
-                Intent chosenIntent = Intent.createChooser(intent, chooserTitle);
-                startActivity(chosenIntent);
+                createAlertDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void createAlertDialog(){
+        alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener());
+        alertDialog.show();
+        backup = true;
+        alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getOKDialogOnClickListener());
+    }
+
+    private void send(){
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, "Hello");
+        String chooserTitle = "Backup";
+        Intent chosenIntent = Intent.createChooser(intent, chooserTitle);
+        startActivity(chosenIntent);
+    }
+
+
+    public View.OnClickListener getOKDialogOnClickListener(){
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                String appPass = ((EditText) alertDialog.findViewById(R.id.dialog_password)).getText().toString();
+                try {
+                    if(Utils.hasText(appPass)){
+                        Password object = (Password) getPasswordQueryBuilder().queryForFirst();
+                        if (EncUtil.decryptData(object.getPassword()).equals(appPass)) {
+                            send();
+                            backup = false;
+                            alertDialog.dismiss();
+                        }else{
+                            TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
+                            textView.setText(getString(R.string.pwd_msg));
+                            textView.setVisibility(View.VISIBLE);
+                        }
+                    }else{
+                        TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
+                        textView.setText(getString(R.string.mandat_pwd_msg));
+                        textView.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private DialogInterface.OnClickListener getCancelListener(){
+        return new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+                backup = false;
+                dialog.dismiss();
+            }
+        };
     }
 
     public AdapterView.OnItemClickListener getItemClickListener(){
@@ -108,15 +159,7 @@ public class MainActivity extends AbstractListActivity {
         try{
             Password password = (Password) getPasswordQueryBuilder().queryForFirst();
             if(password == null || !Utils.hasText(password.getPassword())){
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setCancelable(false);
-                LayoutInflater inflater = getLayoutInflater();
-                builder.setView(inflater.inflate(R.layout.dialog_layout, null));
-                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                alertDialog = builder.create();
+                alertDialog = Utils.getAlertDialog(R.layout.dialog_layout, this, getOkListener(), null);
                 alertDialog.show();
                 alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
@@ -125,6 +168,14 @@ public class MainActivity extends AbstractListActivity {
         } catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    private DialogInterface.OnClickListener getOkListener(){
+        return new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        };
     }
 
     public View.OnClickListener getDialogOnClickListener(){
@@ -164,6 +215,8 @@ public class MainActivity extends AbstractListActivity {
         return ((EditText)alertDialog.findViewById(R.id.confirm_dialog_password)).getText().toString();
     }
 
+
+
     public void setRunning(boolean running){
         this.running = running;
     }
@@ -171,8 +224,12 @@ public class MainActivity extends AbstractListActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
           outState.putBoolean(Utils.RUNNING, running);
+          outState.putBoolean(Utils.ISBACKUP, backup);
     }
 
+    public void setBackup(boolean backup) {
+        this.backup = backup;
+    }
 
     public int getListViewId(){
         return  R.id.list_items;

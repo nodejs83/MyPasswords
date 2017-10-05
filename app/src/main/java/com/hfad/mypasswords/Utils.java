@@ -1,7 +1,10 @@
 package com.hfad.mypasswords;
 
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ public class Utils {
     public static final String STARS = "**********";
     public static final String EMPTY = "";
     public static final String RUNNING = "running";
+    public static final String ISBACKUP = "isBackup";
 
     public static final String NAME = "name";
     public static final String LOGIN = "login";
@@ -40,6 +44,23 @@ public class Utils {
         }
         return null;
     }
+
+
+    public static AlertDialog getAlertDialog(int layoutId, AppCompatActivity activity,
+                                             DialogInterface.OnClickListener okListener,
+                                             DialogInterface.OnClickListener cancelListener){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        builder.setView(inflater.inflate(layoutId, null));
+        builder.setCancelable(true);
+        builder.setPositiveButton(activity.getString(R.string.ok), okListener);
+        if(cancelListener != null){
+            builder.setNegativeButton(activity.getString(R.string.cancel_label), cancelListener);
+        }
+        return builder.create();
+    }
+
+
 
 
     public static void setEditTextValue(AppCompatActivity activity, int id, String value){

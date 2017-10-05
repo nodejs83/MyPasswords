@@ -26,6 +26,7 @@ public class CredentialDetailsActivity extends BaseActivity{
     private boolean running;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,25 +97,28 @@ public class CredentialDetailsActivity extends BaseActivity{
 
 
     private void createAlertDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(CredentialDetailsActivity.this);
-        LayoutInflater inflater = getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_fragment, null));
-        builder.setCancelable(true);
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-            }
-        });
-        builder.setNegativeButton(getString(R.string.cancel_label), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                running = false;
-                dialog.dismiss();
-            }
-        });
-        alertDialog = builder.create();
+        alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener());
         alertDialog.show();
         running = true;
         alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getDialogOnClickListener());
+    }
+
+    private DialogInterface.OnClickListener getOkListener(){
+        return new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        };
+    }
+
+    private DialogInterface.OnClickListener getCancelListener(){
+        return new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id) {
+                running = false;
+                dialog.dismiss();
+            }
+        };
     }
 
 

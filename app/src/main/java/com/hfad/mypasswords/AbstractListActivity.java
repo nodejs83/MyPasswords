@@ -11,6 +11,7 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -46,6 +47,11 @@ public abstract class AbstractListActivity extends BaseActivity {
         }else{
             setRunning(savedInstanceState.getBoolean(Utils.RUNNING));
         }
+
+        if(savedInstanceState != null && savedInstanceState.getBoolean(Utils.ISBACKUP)){
+            createAlertDialog();
+        }
+
         setActionBarTitle();
     }
 
@@ -208,4 +214,10 @@ public abstract class AbstractListActivity extends BaseActivity {
     public void setRunning(boolean running){
         //Just to be overriden
     }
+
+
+    public void createAlertDialog(){
+        //Just to be overriden
+    }
+
 }
