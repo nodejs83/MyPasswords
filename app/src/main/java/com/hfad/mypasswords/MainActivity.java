@@ -112,11 +112,11 @@ public class MainActivity extends AbstractListActivity {
                     buffer.append(i + Utils.MINUS + item.getName() + Utils.DOTS + Utils.RETURN);
 
                     if(Utils.hasText(item.getLogin())){
-                        buffer.append(Utils.TAB + getString(R.string.login) + Utils.DOTS);
+                        buffer.append(getString(R.string.login) + Utils.DOTS);
                         buffer.append(item.getLogin() + Utils.RETURN);
                     }
                     if(Utils.hasText(item.getPassword())){
-                        buffer.append(Utils.TAB + getString(R.string.pwd) + Utils.DOTS);
+                        buffer.append(getString(R.string.pwd) + Utils.DOTS);
                         buffer.append(EncUtil.decryptData(item.getPassword()) + Utils.RETURN);
                     }
                     buffer.append(Utils.RETURN);
