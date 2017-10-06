@@ -5,6 +5,7 @@
     <color name="colorAccent">#3b5998</color>
     <color name="myColor">#627aac</color>
     <color name="error_color">#FF0000</color>
+    <color name="black">#000000</color>
 
 
 </resources>

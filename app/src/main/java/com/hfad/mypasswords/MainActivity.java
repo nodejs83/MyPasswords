@@ -251,7 +251,6 @@ public class MainActivity extends AbstractListActivity {
     }
 
 
-
     public void setRunning(boolean running){
         this.running = running;
     }

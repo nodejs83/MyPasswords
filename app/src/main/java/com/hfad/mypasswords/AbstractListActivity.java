@@ -42,11 +42,7 @@ public abstract class AbstractListActivity extends BaseActivity {
         listView.setOnItemClickListener(getItemClickListener());
         registerForContextMenu(listView);
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
-        if(savedInstanceState == null || !savedInstanceState.getBoolean(Utils.RUNNING)){
-            checkApplicationPassword();
-        }else{
-            setRunning(savedInstanceState.getBoolean(Utils.RUNNING));
-        }
+        checkApplicationPassword();
 
         if(savedInstanceState != null && savedInstanceState.getBoolean(Utils.ISBACKUP)){
             createAlertDialog();

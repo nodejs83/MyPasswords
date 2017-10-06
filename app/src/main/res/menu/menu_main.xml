@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
-    <item
-        android:id="@+id/menu_backup"
-        app:showAsAction="never"
-        android:title="@string/backup" >
-        <menu>
-            <item android:id="@+id/send_me"
-                android:title="Send me my data" />
-        </menu>
-    </item>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
 
 
     <item
         android:id="@+id/action_add"
         android:title="@string/add_order_title"
         android:icon="@drawable/ic_add_white_24dp"
-        android:orderInCategory="1"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="Search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
+        android:id="@+id/menu_backup"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_overflow"
+        android:title="@string/backup" >
+
+        <menu>
+
+            <item
+                android:id="@+id/action_search"
+                android:icon="@android:drawable/ic_menu_search"
+                android:title="@string/filter"
+                app:actionViewClass="android.support.v7.widget.SearchView"
+                app:showAsAction="ifRoom|collapseActionView" />
+
+            <item android:id="@+id/send_me"
+                app:showAsAction="never"
+                android:icon="@android:drawable/ic_menu_send"
+                android:title="@string/send_me" />
+        </menu>
+    </item>
 
 
 </menu>
