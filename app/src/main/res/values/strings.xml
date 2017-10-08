@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Passnet</string>
+    <string name="app_name">Passkeys</string>
     <string name="title_activity_details">Details</string>
     <string name="login_label">Login  :  </string>
     <string name="password_label">Password  :  </string>
@@ -19,7 +19,7 @@
     <string name="alert_yes_button">YES</string>
     <string name="alert_no_button">NO</string>
     <string name="mandat_name_msg">The name is mandatory</string>
-    <string name="login_pwd_msg">Enter a login or a password</string>
+    <string name="login_pwd_msg">One of the left input is mandatory</string>
     <string name="ok">OK</string>
     <string name="mandat_pwd_msg">The password is mandatory</string>
     <string name="match_pwd_msg">The passwords do not match</string>
@@ -28,14 +28,15 @@
     <string name="decrypt">Decrypt</string>
     <string name="save">Save</string>
     <string name="search">Search</string>
-    <string name="send_me">Send me my data</string>
+    <string name="send_me">SEND ME MY DATA</string>
     <string name="delete_all">Delete all</string>
     <string name="backup">Backup</string>
     <string name="application_pwd">The application password</string>
     <string name="login">Login</string>
     <string name="pwd">Password</string>
     <string name="pwd_def">Application password</string>
-    <string name="filter">Filter</string>
+    <string name="filter">SEARCH</string>
+    <string name="query_hint">Search</string>
 
 
 

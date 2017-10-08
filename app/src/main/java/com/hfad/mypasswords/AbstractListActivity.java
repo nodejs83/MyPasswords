@@ -69,6 +69,7 @@ public abstract class AbstractListActivity extends BaseActivity {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(getOnQueryTextListener());
+        searchView.setQueryHint(getString(R.string.query_hint));
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {

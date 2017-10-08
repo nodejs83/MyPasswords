@@ -16,7 +16,7 @@ tools:context="com.hfad.mypasswords.CredentialDetailsActivity">
         android:textColor="@color/error_color"
         android:visibility="invisible"
         android:fontFamily="sans-serif"
-        android:textSize="17dp"/>
+        android:textSize="14dp"/>
 
     <EditText
         android:id="@+id/login"
