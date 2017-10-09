@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.EditText;
 
 
 import com.hfad.mypasswords.data.Item;
@@ -26,11 +28,14 @@ public class UpdateCredentialActivity extends BaseActivity {
             e.printStackTrace();
         }
         setTitle(Utils.EMPTY);
+        String value = null;
         if(savedInstanceState == null){
             Utils.setEditTextValue(this,R.id.update_name ,item.getName() );
+            value = item.getName();
             Utils.setEditTextValue(this,R.id.update_login , item.getLogin());
         }else{
             Utils.setEditTextValue(this,R.id.update_name , savedInstanceState.getString(Utils.NAME) );
+            value = savedInstanceState.getString(Utils.NAME);
             Utils.setEditTextValue(this,R.id.update_login , savedInstanceState.getString(Utils.LOGIN));
             Utils.setEditTextValue(this,R.id.update_password , savedInstanceState.getString(Utils.PASSWORD));
             if(Utils.hasText(savedInstanceState.getString(Utils.ERROR))){
@@ -38,6 +43,9 @@ public class UpdateCredentialActivity extends BaseActivity {
                 Utils.setTextViewVisibility(this,true);
             }
         }
+
+        ((EditText)findViewById(R.id.update_name)).setSelection(value.length());
+        getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     @Override

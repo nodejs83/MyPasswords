@@ -19,7 +19,7 @@
     <string name="alert_yes_button">YES</string>
     <string name="alert_no_button">NO</string>
     <string name="mandat_name_msg">The name is mandatory</string>
-    <string name="login_pwd_msg">One of the left input is mandatory</string>
+    <string name="login_pwd_msg">One of the left inputs is mandatory</string>
     <string name="ok">OK</string>
     <string name="mandat_pwd_msg">The password is mandatory</string>
     <string name="match_pwd_msg">The passwords do not match</string>
@@ -37,6 +37,10 @@
     <string name="pwd_def">Application password</string>
     <string name="filter">SEARCH</string>
     <string name="query_hint">Search</string>
+    <string name="pwd_copied">The password is copied</string>
+    <string name="login_copied">The login is copied</string>
+    <string name="copy">COPY</string>
+
 
 
 

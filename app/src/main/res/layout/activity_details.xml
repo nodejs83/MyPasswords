@@ -18,27 +18,62 @@ tools:context="com.hfad.mypasswords.CredentialDetailsActivity">
         android:fontFamily="sans-serif"
         android:textSize="14dp"/>
 
-    <EditText
-        android:id="@+id/login"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="15dp"
-        android:enabled="false"
-        android:textColor="@color/myColor" />
+        android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".76"
+            android:enabled="false"
+            android:textColor="@color/myColor" />
 
-    <EditText
-        android:id="@+id/password"
+        <Button
+            android:id="@+id/copy_login"
+            style="@android:style/Widget.Button"
+            android:layout_width="0dp"
+            android:layout_height="39dp"
+            android:layout_weight=".24"
+            android:gravity="center"
+            android:onClick="onCopyLogin"
+            android:text="@string/copy" />
+
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="15dp"
-        android:enabled="false"
-        android:textColor="@color/myColor" />
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".76"
+            android:enabled="false"
+            android:textColor="@color/myColor" />
 
+        <Button
+            android:id="@+id/copy_pwd"
+            style="@android:style/Widget.Button"
+            android:layout_width="0dp"
+            android:layout_height="39dp"
+            android:layout_weight=".24"
+            android:gravity="center"
+            android:onClick="onCopyPassword"
+            android:text="@string/copy" />
 
+    </LinearLayout>
 
 </LinearLayout>

@@ -38,6 +38,8 @@ public class Utils {
     public static final String PASSWORD = "password";
     public static final String ERROR = "error";
 
+    public static final String SIMPLE_TEXT = "simple text";
+
 
 
     public static String validateInputs(AppCompatActivity activity,String name, String login, String password){

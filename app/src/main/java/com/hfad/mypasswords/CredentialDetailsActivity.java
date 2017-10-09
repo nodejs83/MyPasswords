@@ -1,6 +1,9 @@
 package com.hfad.mypasswords;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hfad.mypasswords.data.*;
 
@@ -80,6 +84,23 @@ public class CredentialDetailsActivity extends BaseActivity{
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    public void onCopyLogin(View v){
+        copy(R.id.login);
+        Toast.makeText(this, R.string.login_copied, Toast.LENGTH_LONG).show();
+    }
+
+    public void onCopyPassword(View v){
+        copy(R.id.password);
+        Toast.makeText(this, R.string.pwd_copied, Toast.LENGTH_LONG).show();
+    }
+
+    private void copy(int id){
+        ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(Utils.SIMPLE_TEXT, Utils.getEditTextValue(this, id));
+        clipboard.setPrimaryClip(clip);
+    }
+
 
 
     @Override

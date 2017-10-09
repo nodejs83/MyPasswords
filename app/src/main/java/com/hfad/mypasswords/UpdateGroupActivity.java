@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.EditText;
 
 
 import com.hfad.mypasswords.data.Item;
@@ -31,11 +33,16 @@ public class UpdateGroupActivity  extends BaseActivity{
             e.printStackTrace();
         }
         setTitle(Utils.EMPTY);
+        String value = null;
         if(savedInstanceState == null){
             Utils.setEditTextValue(this,R.id.update_group_name,item.getName());
+            value = item.getName();
         }else{
             Utils.setEditTextValue(this,R.id.update_group_name,savedInstanceState.getString(Utils.NAME));
+            value=savedInstanceState.getString(Utils.NAME);
         }
+        ((EditText)findViewById(R.id.update_group_name)).setSelection(value.length());
+        getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
     @Override
