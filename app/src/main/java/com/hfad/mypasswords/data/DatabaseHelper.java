@@ -29,7 +29,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
         try {
-            // Create tables. This onCreate() method will be invoked only once of the application life time i.e. the first time when the application starts.
             TableUtils.createTable(connectionSource, Item.class);
             TableUtils.createTable(connectionSource, Password.class);
         } catch (SQLException e) {
@@ -39,22 +38,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
-//        try {
 
-            // In case of change in database of next version of application, please increase the value of DATABASE_VERSION variable, then this method will be invoked
-            //automatically. Developer needs to handle the upgrade logic here, i.e. create a new table or a new column to an existing table, take the backups of the
-            // existing database etc.
-//            TableUtils.dropTable(connectionSource, Item.class, true);
-//            TableUtils.dropTable(connectionSource, Password.class, true);
-//            onCreate(sqLiteDatabase, connectionSource);
-//        } catch (SQLException e) {
-//            Log.e(DatabaseHelper.class.getName(), "Unable to upgrade database from version " + i + " to new "
-//                    + i1, e);
-//        }
     }
 
-    // Create the getDao methods of all database tables to access those from android code.
-    // Insert, delete, read, update everything will be happened through DAOs
 
     public Dao<Item, Integer> getItemDao() throws SQLException {
         if (itemDao == null) {
