@@ -26,6 +26,7 @@ public class Utils {
     public static final String EMPTY = "";
     public static final String RUNNING = "running";
     public static final String ISBACKUP = "isBackup";
+    public static final String ISEXPORT = "isExport";
     public static final String TEXT_PLAIN = "text/plain";
     public static final String RETURN = "\n";
     public static final String TAB = "\t";
@@ -39,6 +40,12 @@ public class Utils {
     public static final String ERROR = "error";
 
     public static final String SIMPLE_TEXT = "simple text";
+    public static final String EXPORT = "export";
+    public static final String BACKUP = "backup";
+    public static final String EXPORT_FILE = "export.csv";
+    public static final String PASSKEYS = "Passkeys";
+    public static final String CL = "[";
+    public static final String CR = "]";
 
 
 

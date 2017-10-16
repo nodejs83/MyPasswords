@@ -39,7 +39,9 @@
     <string name="query_hint">Search</string>
     <string name="pwd_copied">The password is copied</string>
     <string name="login_copied">The login is copied</string>
+    <string name="file_exported">The csv is exported</string>
     <string name="copy">COPY</string>
+    <string name="export">EXPORT DATA</string>
 
 
 

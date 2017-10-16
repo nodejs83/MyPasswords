@@ -5,21 +5,26 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hfad.mypasswords.data.Item;
 import com.hfad.mypasswords.data.Password;
-import com.j256.ormlite.stmt.DeleteBuilder;;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.opencsv.CSVWriter;;
 
 
-
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOError;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -31,6 +36,7 @@ public class MainActivity extends AbstractListActivity {
     private boolean running;
     private AlertDialog alertDialog;
     private boolean backup;
+    private boolean export;
 
     public List<Item> getItems(){
         try{
@@ -71,7 +77,10 @@ public class MainActivity extends AbstractListActivity {
                 startActivity(intent);
                 return true;
             case R.id.send_me:
-                createAlertDialog();
+                createAlertDialog(Utils.BACKUP);
+                return true;
+            case R.id.export:
+                createAlertDialog(Utils.EXPORT);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -79,12 +88,17 @@ public class MainActivity extends AbstractListActivity {
     }
 
     @Override
-    public void createAlertDialog(){
+    public void createAlertDialog(String operation){
         alertDialog = Utils.getAlertDialog(R.layout.dialog_fragment, this, getOkListener(), getCancelListener(), true);
         alertDialog.show();
-        backup = true;
         alertDialog.getWindow().setSoftInputMode (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getOKDialogOnClickListener());
+        if(Utils.BACKUP.equals(operation)){
+            backup = true;
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getOKDialogOnClickListener(Utils.BACKUP));
+        }else{
+            export = true;
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(getOKDialogOnClickListener(Utils.EXPORT));
+        }
     }
 
     private void send(){
@@ -95,6 +109,44 @@ public class MainActivity extends AbstractListActivity {
         String chooserTitle = getString(R.string.backup);
         Intent chosenIntent = Intent.createChooser(intent, chooserTitle);
         startActivity(chosenIntent);
+    }
+
+
+    private void export(){
+        String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        String filePath = baseDir + File.separator + Utils.PASSKEYS + File.separator + Utils.EXPORT_FILE;
+        File f = new File(filePath );
+        CSVWriter writer;
+        try{
+            if(f.exists() && !f.isDirectory()){
+                writer = new CSVWriter(new FileWriter(filePath , true));
+            }
+            else {
+                writer = new CSVWriter(new FileWriter(filePath));
+            }
+
+            List<Item> items =  queryItems(getItemQueryBuilder().orderBy(Utils.NAME, true).prepare());
+            if(items != null && !items.isEmpty()) {
+                for (Item item : items) {
+                    String[] data = {String.valueOf(item.getId()),item.getName(), formatString(item.getLogin()),
+                            formatString(EncUtil.decryptData(item.getPassword())), String.valueOf(item.isGroup),
+                            item.getGroupItem() != null ?  String.valueOf(item.getGroupItem().getId()) : Utils.EMPTY};
+                    writer.writeNext(data);
+                }
+            }
+            writer.close();
+            Toast.makeText(this, R.string.file_exported, Toast.LENGTH_LONG).show();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private String formatString(String value){
+        if(Utils.hasText(value)){
+            return value;
+        }
+        return Utils.EMPTY;
     }
 
     public StringBuffer getData(){
@@ -109,7 +161,12 @@ public class MainActivity extends AbstractListActivity {
             if(items != null && !items.isEmpty()){
                 int i = 2;
                 for(Item item : items){
-                    buffer.append(i + Utils.MINUS + item.getName() + Utils.DOTS + Utils.RETURN);
+                    if(item.getGroupItem() == null){
+                        buffer.append(i + Utils.MINUS + item.getName() + Utils.DOTS + Utils.RETURN);
+                    }else{
+                        buffer.append(i + Utils.MINUS + item.getGroupItem().getName() + "[" + item.getName() + "]"  + Utils.DOTS + Utils.RETURN);
+                    }
+
 
                     if(Utils.hasText(item.getLogin())){
                         buffer.append(getString(R.string.login) + Utils.DOTS);
@@ -132,7 +189,7 @@ public class MainActivity extends AbstractListActivity {
     }
 
 
-    public View.OnClickListener getOKDialogOnClickListener(){
+    public View.OnClickListener getOKDialogOnClickListener(final String operation){
         return new View.OnClickListener() {
             public void onClick(View v) {
                 String appPass = ((EditText) alertDialog.findViewById(R.id.dialog_password)).getText().toString();
@@ -140,8 +197,14 @@ public class MainActivity extends AbstractListActivity {
                     if(Utils.hasText(appPass)){
                         Password object = (Password) getPasswordQueryBuilder().queryForFirst();
                         if (EncUtil.decryptData(object.getPassword()).equals(appPass)) {
-                            send();
-                            backup = false;
+                            if(Utils.BACKUP.equals(operation)){
+                                send();
+                                backup = false;
+                            }else{
+                                export();
+                                export = false;
+                            }
+
                             alertDialog.dismiss();
                         }else{
                             TextView textView = ((TextView)alertDialog.findViewById(R.id.message));
@@ -160,10 +223,13 @@ public class MainActivity extends AbstractListActivity {
         };
     }
 
+
+
     private DialogInterface.OnClickListener getCancelListener(){
         return new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id) {
                 backup = false;
+                export = false;
                 dialog.dismiss();
             }
         };
@@ -259,6 +325,7 @@ public class MainActivity extends AbstractListActivity {
     protected void onSaveInstanceState(Bundle outState) {
           outState.putBoolean(Utils.RUNNING, running);
           outState.putBoolean(Utils.ISBACKUP, backup);
+          outState.putBoolean(Utils.ISEXPORT, export);
     }
 
     public void setBackup(boolean backup) {

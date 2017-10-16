@@ -44,8 +44,13 @@ public abstract class AbstractListActivity extends BaseActivity {
         listView.setOnCreateContextMenuListener(getCreateContextMenuListener());
         checkApplicationPassword();
 
-        if(savedInstanceState != null && savedInstanceState.getBoolean(Utils.ISBACKUP)){
-            createAlertDialog();
+        if(savedInstanceState != null){
+            if(savedInstanceState.getBoolean(Utils.ISBACKUP)){
+                createAlertDialog(Utils.BACKUP);
+            }else{
+                createAlertDialog(Utils.EXPORT);
+            }
+
         }
 
         setActionBarTitle();
@@ -213,7 +218,7 @@ public abstract class AbstractListActivity extends BaseActivity {
     }
 
 
-    public void createAlertDialog(){
+    public void createAlertDialog(String operation){
         //Just to be overriden
     }
 
