@@ -34,10 +34,10 @@
             android:title="@string/send_me" />
 
 
-            <item android:id="@+id/export"
-                app:showAsAction="never"
-                android:icon="@android:drawable/ic_menu_send"
-                android:title="@string/export" />
+            <!--<item android:id="@+id/export"-->
+                <!--app:showAsAction="never"-->
+                <!--android:icon="@android:drawable/ic_menu_send"-->
+                <!--android:title="@string/export" />-->
         </menu>
     </item>
 

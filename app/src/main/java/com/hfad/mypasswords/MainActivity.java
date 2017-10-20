@@ -79,9 +79,9 @@ public class MainActivity extends AbstractListActivity {
             case R.id.send_me:
                 createAlertDialog(Utils.BACKUP);
                 return true;
-            case R.id.export:
-                createAlertDialog(Utils.EXPORT);
-                return true;
+//            case R.id.export:
+//                createAlertDialog(Utils.EXPORT);
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -119,10 +119,12 @@ public class MainActivity extends AbstractListActivity {
         CSVWriter writer;
         try{
             if(f.exists() && !f.isDirectory()){
-                writer = new CSVWriter(new FileWriter(filePath , true));
+                writer = new CSVWriter(new FileWriter
+                        (filePath , true));
             }
             else {
-                writer = new CSVWriter(new FileWriter(filePath));
+                f.createNewFile();
+                writer = new CSVWriter(new FileWriter(f));
             }
 
             List<Item> items =  queryItems(getItemQueryBuilder().orderBy(Utils.NAME, true).prepare());
@@ -164,7 +166,8 @@ public class MainActivity extends AbstractListActivity {
                     if(item.getGroupItem() == null){
                         buffer.append(i + Utils.MINUS + item.getName() + Utils.DOTS + Utils.RETURN);
                     }else{
-                        buffer.append(i + Utils.MINUS + item.getGroupItem().getName() + "[" + item.getName() + "]"  + Utils.DOTS + Utils.RETURN);
+                        buffer.append(i + Utils.MINUS + getHelper().getItemDao().queryForId(item.getGroupItem().getId()).getName()
+                                + "[" + item.getName() + "]"  + Utils.DOTS + Utils.RETURN);
                     }
 
 
