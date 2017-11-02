@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Passkeys</string>
+    <string name="actions">Actions</string>
+    <string name="actions_label">Actions</string>
+    <string name="add_order_title">Ajouter</string>
+    <string name="alert_label">Confirmez la suppréssion</string>
+    <string name="alert_no_button">NON</string>
+    <string name="alert_title_label">Etes vous sûr de vouloir supprimer</string>
+    <string name="alert_yes_button">OUI</string>
+    <string name="application_pwd">Le mot de passe de l\'application</string>
+    <string name="backup">Sauvegarde</string>
+    <string name="cancel_label">Annuler</string>
+    <string name="choose_pwd">Choisissez un mot de passe</string>
+    <string name="confirm_password_hint">Confirmez le mot de passe</string>
+    <string name="copy">COPIER</string>
+    <string name="decrypt">Décrypter</string>
+    <string name="delete_all"></string>
+    <string name="delete_label">Supprimer</string>
+    <string name="description_hint">Déscription</string>
+    <string name="export">Exporter les données</string>
+    <string name="file_exported">Le csv est exporté</string>
+    <string name="filter">RECHERCHER</string>
+    <string name="login">Login</string>
+    <string name="login_copied">Le login est copié</string>
+    <string name="login_hint">Login</string>
+    <string name="login_label">Login  :</string>
+    <string name="login_pwd_msg">L\'une des entrées réstantes est obligatoire</string>
+    <string name="mandat_name_msg">Le nom est obligatoire</string>
+    <string name="mandat_pwd_msg">Le mot de passe est obligatoire</string>
+    <string name="match_pwd_msg">Les mots de passe ne correspondent pas</string>
+    <string name="modify_label">Modifier</string>
+    <string name="name_hint">Nom</string>
+    <string name="ok">OK</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="password_label">Mot de passe  :</string>
+    <string name="pwd">Mot de passe</string>
+    <string name="pwd_copied">Le mot de passe est copié</string>
+    <string name="pwd_def">Le mot de passe de l\'application</string>
+    <string name="pwd_msg">Le mot de passe est incorrect</string>
+    <string name="query_hint">Rechercher</string>
+    <string name="save">Enreg.</string>
+    <string name="search">Rechercher</string>
+    <string name="send_me">Envoyez moi mes données</string>
+    <string name="title_activity_details">Détails</string>
+
+
+
+    <string-array name="entry_types">
+        <item>Compte</item>
+        <item>Groupe</item>
+    </string-array>
+</resources>

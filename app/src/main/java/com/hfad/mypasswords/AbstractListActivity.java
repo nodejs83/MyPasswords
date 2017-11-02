@@ -47,10 +47,9 @@ public abstract class AbstractListActivity extends BaseActivity {
         if(savedInstanceState != null){
             if(savedInstanceState.getBoolean(Utils.ISBACKUP)){
                 createAlertDialog(Utils.BACKUP);
-            }else{
+            }else if(savedInstanceState.getBoolean(Utils.EXPORT)){
                 createAlertDialog(Utils.EXPORT);
             }
-
         }
 
         setActionBarTitle();
