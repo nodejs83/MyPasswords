@@ -6,7 +6,7 @@
     <string name="add_order_title">Ajouter</string>
     <string name="alert_label">Confirmez la suppréssion</string>
     <string name="alert_no_button">NON</string>
-    <string name="alert_title_label">Etes vous sûr de vouloir supprimer</string>
+    <string name="alert_title_label">Êtes vous sûr de vouloir supprimer ?</string>
     <string name="alert_yes_button">OUI</string>
     <string name="application_pwd">Le mot de passe de l\'application</string>
     <string name="backup">Sauvegarde</string>
@@ -41,7 +41,7 @@
     <string name="query_hint">Rechercher</string>
     <string name="save">Enreg.</string>
     <string name="search">Rechercher</string>
-    <string name="send_me">Envoyez moi mes données</string>
+    <string name="send_me">ENVOIE MOI MES DONNÉES</string>
     <string name="title_activity_details">Détails</string>
 
 
